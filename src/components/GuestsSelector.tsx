@@ -53,7 +53,7 @@ export function GuestsSelector({ isOpen, onClose }: GuestsSelectorProps) {
   return (
     <div
       ref={dropdownRef}
-      className="absolute top-full mt-4 right-0 bg-white rounded-2xl shadow-2xl p-6 w-[380px] z-50 border border-gray-100"
+      className="absolute top-full mt-10 right-0 bg-white rounded-2xl shadow-2xl p-6 w-[380px] z-50 border border-gray-100"
     >
       <div className="space-y-6">
         {/* Adults */}
