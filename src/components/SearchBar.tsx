@@ -1,12 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { Calendar, Users, Search, Home, Castle, Building2, Hotel, Building } from "lucide-react";
+import { Calendar, Users, Search, Home, Castle, Building2, Hotel, Building, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { LocationAutocomplete } from "./LocationAutocomplete";
+import { DateRangePicker } from "./DateRangePicker";
+import { format } from "date-fns";
 
 export function SearchBar() {
   const [activeTab, setActiveTab] = useState("all");
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [checkIn, setCheckIn] = useState<Date | null>(null);
+  const [checkOut, setCheckOut] = useState<Date | null>(null);
 
   const categories = [
   { id: "all", label: "All", icon: null, color: null },
@@ -17,6 +22,24 @@ export function SearchBar() {
   { id: "condos", label: "Condos", icon: Building, color: "#AA96DA" },
   { id: "penthouses", label: "Penthouses", icon: Building2, color: "#FCBAD3" }];
 
+  const handleDateSelect = (checkInDate: Date | null, checkOutDate: Date | null) => {
+    setCheckIn(checkInDate);
+    setCheckOut(checkOutDate);
+  };
+
+  const clearDates = () => {
+    setCheckIn(null);
+    setCheckOut(null);
+  };
+
+  const formatDateRange = () => {
+    if (checkIn && checkOut) {
+      return `${format(checkIn, "MMM d")} - ${format(checkOut, "MMM d, yyyy")}`;
+    } else if (checkIn) {
+      return format(checkIn, "MMM d, yyyy");
+    }
+    return "";
+  };
 
   return (
     <div className="max-w-5xl mx-auto">
@@ -47,7 +70,7 @@ export function SearchBar() {
       </div>
 
       {/* Search Form */}
-      <div className="bg-white rounded-2xl shadow-2xl p-3 sm:p-4">
+      <div className="bg-white rounded-2xl shadow-2xl p-3 sm:p-4 relative">
         <div className="grid grid-cols-1 md:grid-cols-[2fr_2fr_1.5fr_auto] gap-3 md:gap-0 md:divide-x">
           {/* Location */}
           <div className="px-4 py-3">
@@ -58,17 +81,29 @@ export function SearchBar() {
           </div>
 
           {/* Dates */}
-          <div className="px-4 py-3">
+          <div className="px-4 py-3 relative">
             <label className="text-xs font-semibold text-gray-700 block mb-1">
               Check-in & Check-out Dates
             </label>
             <div className="flex items-center gap-2">
               <Calendar className="w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="17 Oct 2025 - 18 Oct 2025"
-                className="w-full text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none" />
-
+              <button
+                onClick={() => setIsCalendarOpen(!isCalendarOpen)}
+                className="flex-1 text-left text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none"
+              >
+                {formatDateRange() || "Add dates"}
+              </button>
+              {(checkIn || checkOut) && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    clearDates();
+                  }}
+                  className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <X className="w-4 h-4 text-gray-600" />
+                </button>
+              )}
             </div>
           </div>
 
@@ -95,6 +130,13 @@ export function SearchBar() {
             </Button>
           </div>
         </div>
+
+        {/* Date Range Picker */}
+        <DateRangePicker
+          isOpen={isCalendarOpen}
+          onClose={() => setIsCalendarOpen(false)}
+          onSelect={handleDateSelect}
+        />
       </div>
     </div>);
 

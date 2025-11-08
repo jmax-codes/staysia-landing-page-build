@@ -1,185 +1,220 @@
 "use client";
 
-import * as React from "react";
-import { Calendar } from "@/components/ui/calendar";
+import { useState, useEffect } from "react";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar as CalendarIcon, ChevronDown, X } from "lucide-react";
-import { format } from "date-fns";
-import { DateRange } from "react-day-picker";
-import { cn } from "@/lib/utils";
+  format,
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  isSameMonth,
+  isSameDay,
+  addMonths,
+  isWithinInterval,
+  isBefore,
+  startOfDay,
+} from "date-fns";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface DateRangePickerProps {
-  className?: string;
+  onSelect?: (checkIn: Date | null, checkOut: Date | null) => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-export function DateRangePicker({ className }: DateRangePickerProps) {
-  const [date, setDate] = React.useState<DateRange | undefined>({
-    from: undefined,
-    to: undefined,
-  });
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [activeView, setActiveView] = React.useState<"dates" | "months" | "flexible">("dates");
+export function DateRangePicker({ onSelect, isOpen, onClose }: DateRangePickerProps) {
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [checkIn, setCheckIn] = useState<Date | null>(null);
+  const [checkOut, setCheckOut] = useState<Date | null>(null);
+  const [activeTab, setActiveTab] = useState<"dates" | "months" | "flexible">("dates");
+
+  const nextMonth = addMonths(currentMonth, 1);
+  const today = startOfDay(new Date());
+
+  const handleDateClick = (date: Date) => {
+    if (isBefore(date, today)) return;
+
+    if (!checkIn || (checkIn && checkOut)) {
+      // Start new selection
+      setCheckIn(date);
+      setCheckOut(null);
+    } else if (checkIn && !checkOut) {
+      // Complete the selection
+      if (isBefore(date, checkIn)) {
+        setCheckIn(date);
+        setCheckOut(checkIn);
+      } else {
+        setCheckOut(date);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (checkIn && checkOut && onSelect) {
+      onSelect(checkIn, checkOut);
+    }
+  }, [checkIn, checkOut, onSelect]);
+
+  const renderMonth = (monthDate: Date) => {
+    const monthStart = startOfMonth(monthDate);
+    const monthEnd = endOfMonth(monthDate);
+    const days = eachDayOfInterval({ start: monthStart, end: monthEnd });
+
+    // Get the day of week for the first day (0 = Sunday, 6 = Saturday)
+    const firstDayOfWeek = monthStart.getDay();
+    const emptyDays = Array(firstDayOfWeek).fill(null);
+
+    return (
+      <div className="flex-1 px-4">
+        <div className="text-center mb-4">
+          <h3 className="text-base font-semibold text-gray-900">
+            {format(monthDate, "MMMM yyyy")}
+          </h3>
+        </div>
+
+        {/* Day headers */}
+        <div className="grid grid-cols-7 gap-1 mb-2">
+          {["S", "M", "T", "W", "T", "F", "S"].map((day, i) => (
+            <div key={i} className="text-center text-xs font-medium text-gray-500 py-2">
+              {day}
+            </div>
+          ))}
+        </div>
+
+        {/* Calendar grid */}
+        <div className="grid grid-cols-7 gap-1">
+          {emptyDays.map((_, i) => (
+            <div key={`empty-${i}`} className="aspect-square" />
+          ))}
+          {days.map((day) => {
+            const isCheckInDate = checkIn && isSameDay(day, checkIn);
+            const isCheckOutDate = checkOut && isSameDay(day, checkOut);
+            const isInRange =
+              checkIn &&
+              checkOut &&
+              isWithinInterval(day, { start: checkIn, end: checkOut });
+            const isPast = isBefore(day, today);
+            const isToday = isSameDay(day, today);
+
+            return (
+              <button
+                key={day.toString()}
+                onClick={() => handleDateClick(day)}
+                disabled={isPast}
+                className={`
+                  relative aspect-square flex items-center justify-center text-sm font-medium
+                  transition-all rounded-full
+                  ${isPast ? "text-gray-300 cursor-not-allowed" : ""}
+                  ${!isPast && !isCheckInDate && !isCheckOutDate && !isInRange ? "hover:border hover:border-gray-900" : ""}
+                  ${isInRange && !isCheckInDate && !isCheckOutDate ? "bg-gray-100" : ""}
+                  ${isCheckInDate || isCheckOutDate ? "bg-gray-900 text-white z-10" : "text-gray-900"}
+                  ${isToday && !isCheckInDate && !isCheckOutDate ? "border border-gray-900" : ""}
+                `}
+              >
+                <span className="relative z-10">{format(day, "d")}</span>
+                
+                {/* Range background connectors */}
+                {isInRange && !isCheckInDate && !isCheckOutDate && (
+                  <>
+                    <div className="absolute inset-y-0 left-0 right-0 bg-gray-100 -z-10" />
+                  </>
+                )}
+                {isCheckInDate && checkOut && (
+                  <div className="absolute inset-y-0 left-1/2 right-0 bg-gray-100 -z-10" />
+                )}
+                {isCheckOutDate && checkIn && (
+                  <div className="absolute inset-y-0 left-0 right-1/2 bg-gray-100 -z-10" />
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  if (!isOpen) return null;
 
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>
-        <button
-          className={cn(
-            "flex items-center gap-2 w-full text-left focus:outline-none",
-            className
-          )}
-        >
-          <CalendarIcon className="w-5 h-5 text-gray-400 flex-shrink-0" />
-          <span className="text-sm text-gray-800">
-            {date?.from ? (
-              date.to ? (
-                <>
-                  {format(date.from, "dd MMM yyyy")} - {format(date.to, "dd MMM yyyy")}
-                </>
-              ) : (
-                format(date.from, "dd MMM yyyy")
-              )
-            ) : (
-              <span className="text-gray-400">17 Oct 2025 - 18 Oct 2025</span>
-            )}
-          </span>
-        </button>
-      </PopoverTrigger>
-      <PopoverContent 
-        className="w-auto p-0 bg-white shadow-2xl rounded-3xl border-0" 
-        align="start" 
-        sideOffset={12}
-        alignOffset={-50}
-      >
-        <div className="p-8">
-          {/* View Tabs */}
-          <div className="flex items-center justify-center gap-3 mb-8">
-            <button
-              onClick={() => setActiveView("dates")}
-              className={cn(
-                "px-6 py-2.5 rounded-full text-sm font-medium transition-all",
-                activeView === "dates"
-                  ? "bg-gray-900 text-white shadow-md"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              )}
-            >
-              Dates
-            </button>
-            <button
-              onClick={() => setActiveView("months")}
-              className={cn(
-                "px-6 py-2.5 rounded-full text-sm font-medium transition-all",
-                activeView === "months"
-                  ? "bg-gray-900 text-white shadow-md"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              )}
-            >
-              Months
-            </button>
-            <button
-              onClick={() => setActiveView("flexible")}
-              className={cn(
-                "px-6 py-2.5 rounded-full text-sm font-medium transition-all",
-                activeView === "flexible"
-                  ? "bg-gray-900 text-white shadow-md"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              )}
-            >
-              Flexible
-            </button>
-          </div>
-
-          {/* Calendar */}
-          {activeView === "dates" && (
-            <>
-              <Calendar
-                mode="range"
-                defaultMonth={date?.from || new Date()}
-                selected={date}
-                onSelect={setDate}
-                numberOfMonths={2}
-                classNames={{
-                  months: "flex flex-row gap-12",
-                  month: "space-y-6",
-                  month_caption: "flex justify-center pt-1 relative items-center mb-6",
-                  caption_label: "text-2xl font-semibold text-gray-900",
-                  nav: "flex items-center gap-1",
-                  button_previous: cn(
-                    "absolute -left-2 h-10 w-10 bg-transparent p-0 hover:bg-gray-100 rounded-full transition-colors flex items-center justify-center"
-                  ),
-                  button_next: cn(
-                    "absolute -right-2 h-10 w-10 bg-transparent p-0 hover:bg-gray-100 rounded-full transition-colors flex items-center justify-center"
-                  ),
-                  table: "w-full border-collapse",
-                  weekdays: "flex",
-                  weekday: "text-gray-500 w-14 font-medium text-sm uppercase tracking-wide text-center py-3",
-                  week: "flex w-full mt-1",
-                  day: cn(
-                    "relative h-14 w-14 text-center text-base p-0 font-normal",
-                    "[&:has([data-range-middle])]:bg-gray-200",
-                    "first:[&:has([data-range-middle])]:rounded-l-none",
-                    "last:[&:has([data-range-middle])]:rounded-r-none"
-                  ),
-                  day_button: cn(
-                    "relative h-14 w-14 p-0 font-normal text-base transition-all",
-                    "hover:bg-gray-100 rounded-full",
-                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#283B73] focus-visible:ring-offset-2",
-                    "data-[selected-single=true]:bg-[#283B73] data-[selected-single=true]:text-white data-[selected-single=true]:hover:bg-[#283B73] data-[selected-single=true]:hover:text-white data-[selected-single=true]:rounded-full data-[selected-single=true]:scale-100 data-[selected-single=true]:font-semibold",
-                    "data-[range-start=true]:bg-[#283B73] data-[range-start=true]:text-white data-[range-start=true]:hover:bg-[#283B73] data-[range-start=true]:hover:text-white data-[range-start=true]:rounded-full data-[range-start=true]:z-10 data-[range-start=true]:scale-100 data-[range-start=true]:font-semibold",
-                    "data-[range-end=true]:bg-[#283B73] data-[range-end=true]:text-white data-[range-end=true]:hover:bg-[#283B73] data-[range-end=true]:hover:text-white data-[range-end=true]:rounded-full data-[range-end=true]:z-10 data-[range-end=true]:scale-100 data-[range-end=true]:font-semibold",
-                    "data-[range-middle=true]:bg-transparent data-[range-middle=true]:text-gray-900 data-[range-middle=true]:hover:bg-gray-100 data-[range-middle=true]:rounded-none"
-                  ),
-                  range_start: "bg-[#283B73] text-white rounded-full",
-                  range_end: "bg-[#283B73] text-white rounded-full",
-                  range_middle: "bg-gray-200 text-gray-900",
-                  today: "font-semibold",
-                  outside: "text-gray-300 opacity-50 hover:bg-transparent",
-                  disabled: "text-gray-300 opacity-30 cursor-not-allowed hover:bg-transparent",
-                  hidden: "invisible",
-                }}
-              />
-
-              {/* Bottom Dropdowns */}
-              <div className="grid grid-cols-2 gap-4 mt-8 pt-6 border-t border-gray-200">
-                <div>
-                  <label className="text-sm font-semibold text-gray-900 mb-2 block">
-                    Check in
-                  </label>
-                  <button className="w-full flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg hover:border-gray-400 transition-colors">
-                    <span className="text-sm text-gray-700">Exact day</span>
-                    <ChevronDown className="w-4 h-4 text-gray-500" />
-                  </button>
-                </div>
-                <div>
-                  <label className="text-sm font-semibold text-gray-900 mb-2 block">
-                    Check out
-                  </label>
-                  <button className="w-full flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg hover:border-gray-400 transition-colors">
-                    <span className="text-sm text-gray-700">Exact day</span>
-                    <ChevronDown className="w-4 h-4 text-gray-500" />
-                  </button>
-                </div>
-              </div>
-            </>
-          )}
-
-          {activeView === "months" && (
-            <div className="flex items-center justify-center h-64 text-gray-500">
-              <p className="text-sm">Month selection view coming soon</p>
-            </div>
-          )}
-
-          {activeView === "flexible" && (
-            <div className="flex items-center justify-center h-64 text-gray-500">
-              <p className="text-sm">Flexible dates view coming soon</p>
-            </div>
-          )}
+    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 z-50 w-full max-w-3xl">
+      <div className="bg-white rounded-3xl shadow-2xl border border-gray-200 p-6">
+        {/* Tab switcher */}
+        <div className="flex items-center justify-center gap-3 mb-6">
+          <button
+            onClick={() => setActiveTab("dates")}
+            className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all ${
+              activeTab === "dates"
+                ? "bg-gray-900 text-white"
+                : "text-gray-700 hover:bg-gray-100"
+            }`}
+          >
+            Dates
+          </button>
+          <button
+            onClick={() => setActiveTab("months")}
+            className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all ${
+              activeTab === "months"
+                ? "bg-gray-900 text-white"
+                : "text-gray-700 hover:bg-gray-100"
+            }`}
+          >
+            Months
+          </button>
+          <button
+            onClick={() => setActiveTab("flexible")}
+            className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all ${
+              activeTab === "flexible"
+                ? "bg-gray-900 text-white"
+                : "text-gray-700 hover:bg-gray-100"
+            }`}
+          >
+            Flexible
+          </button>
         </div>
-      </PopoverContent>
-    </Popover>
+
+        {activeTab === "dates" && (
+          <>
+            {/* Navigation */}
+            <div className="flex items-center justify-between mb-4">
+              <button
+                onClick={() => setCurrentMonth(addMonths(currentMonth, -1))}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Two months side by side */}
+            <div className="flex gap-8">
+              {renderMonth(currentMonth)}
+              {renderMonth(nextMonth)}
+            </div>
+          </>
+        )}
+
+        {activeTab === "months" && (
+          <div className="text-center py-12 text-gray-500">
+            Select a month for your stay
+          </div>
+        )}
+
+        {activeTab === "flexible" && (
+          <div className="text-center py-12 text-gray-500">
+            Choose flexible dates
+          </div>
+        )}
+      </div>
+
+      {/* Backdrop */}
+      <div
+        className="fixed inset-0 -z-10"
+        onClick={onClose}
+      />
+    </div>
   );
 }
