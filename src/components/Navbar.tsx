@@ -2,14 +2,18 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Globe, Menu, User } from "lucide-react";
+import { Globe, Menu, User, LogOut } from "lucide-react";
 import { Button } from "./ui/button";
 import { GlobalSettingsModal } from "./GlobalSettingsModal";
 import { gsap } from "gsap";
+import { useSession, authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -17,6 +21,8 @@ export function Navbar() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const navRef = useRef<HTMLElement>(null);
+  const { data: session, isPending, refetch } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,6 +57,43 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isScrolled]);
+
+  const handleSignOut = async () => {
+    const token = localStorage.getItem("bearer_token");
+
+    const { error } = await authClient.signOut({
+      fetchOptions: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    });
+
+    if (error?.code) {
+      toast.error("Failed to log out. Please try again.");
+    } else {
+      localStorage.removeItem("bearer_token");
+      refetch();
+      toast.success("Logged out successfully");
+      router.push("/");
+    }
+  };
+
+  const handleBookingsClick = (e: React.MouseEvent) => {
+    if (!session?.user) {
+      e.preventDefault();
+      router.push("/auth?redirect=" + encodeURIComponent("/bookings"));
+    }
+  };
+
+  const handleBecomeHostClick = () => {
+    if (!session?.user) {
+      router.push("/auth?redirect=" + encodeURIComponent("/"));
+    } else {
+      // TODO: Navigate to host dashboard when implemented
+      toast.info("Host dashboard coming soon!");
+    }
+  };
 
   return (
     <>
@@ -98,7 +141,8 @@ export function Navbar() {
               WISHLISTS
             </Link>
             <Link 
-              href="#bookings" 
+              href="/bookings"
+              onClick={handleBookingsClick}
               className={`font-medium text-lg tracking-wide transition-colors duration-300 ${
                 isScrolled 
                   ? "text-gray-700 hover:text-[#283B73]" 
@@ -120,6 +164,7 @@ export function Navbar() {
               CONTACT US
             </Link>
             <Button 
+              onClick={handleBecomeHostClick}
               className={`font-semibold px-6 py-2 rounded-full transition-all duration-300 ${
                 isScrolled
                   ? "bg-[#283B73] text-white hover:bg-[#1e2d5a]"
@@ -157,15 +202,55 @@ export function Navbar() {
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem className="cursor-pointer">
-                  Log in or Sign up
-                </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">
-                  Become a Host
-                </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">
-                  Help Center
-                </DropdownMenuItem>
+                {!isPending && session?.user ? (
+                  <>
+                    <div className="px-2 py-1.5 text-sm font-semibold text-gray-900">
+                      {session.user.name}
+                    </div>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className="cursor-pointer">
+                      Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer">
+                      Account Settings
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={handleBecomeHostClick}
+                      className="cursor-pointer"
+                    >
+                      Become a Host
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer">
+                      Help Center
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem 
+                      onClick={handleSignOut}
+                      className="cursor-pointer text-red-600 focus:text-red-600"
+                    >
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Log out
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <>
+                    <DropdownMenuItem 
+                      onClick={() => router.push("/auth")}
+                      className="cursor-pointer font-semibold"
+                    >
+                      Log in or Sign up
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={handleBecomeHostClick}
+                      className="cursor-pointer"
+                    >
+                      Become a Host
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer">
+                      Help Center
+                    </DropdownMenuItem>
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -196,15 +281,55 @@ export function Navbar() {
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem className="cursor-pointer">
-                  Log in or Sign up
-                </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">
-                  Become a Host
-                </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">
-                  Help Center
-                </DropdownMenuItem>
+                {!isPending && session?.user ? (
+                  <>
+                    <div className="px-2 py-1.5 text-sm font-semibold text-gray-900">
+                      {session.user.name}
+                    </div>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className="cursor-pointer">
+                      Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer">
+                      Account Settings
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={handleBecomeHostClick}
+                      className="cursor-pointer"
+                    >
+                      Become a Host
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer">
+                      Help Center
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem 
+                      onClick={handleSignOut}
+                      className="cursor-pointer text-red-600 focus:text-red-600"
+                    >
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Log out
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <>
+                    <DropdownMenuItem 
+                      onClick={() => router.push("/auth")}
+                      className="cursor-pointer font-semibold"
+                    >
+                      Log in or Sign up
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={handleBecomeHostClick}
+                      className="cursor-pointer"
+                    >
+                      Become a Host
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer">
+                      Help Center
+                    </DropdownMenuItem>
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

@@ -5,6 +5,7 @@ import ErrorReporter from "@/components/ErrorReporter";
 import Script from "next/script";
 import { Providers } from "@/components/Providers";
 import { Navbar } from "@/components/Navbar";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Staysia - Find Your Perfect Stay",
@@ -34,6 +35,7 @@ export default function RootLayout({
           <Navbar />
           {children}
         </Providers>
+        <Toaster position="top-center" />
         <VisualEditsMessenger />
       </body>
     </html>
