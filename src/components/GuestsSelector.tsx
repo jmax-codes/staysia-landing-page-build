@@ -48,15 +48,6 @@ export function GuestsSelector({ isOpen, onClose }: GuestsSelectorProps) {
     }));
   };
 
-  const formatGuestSummary = () => {
-    const parts = [];
-    if (guests.adults > 0) parts.push(`${guests.adults} Adult${guests.adults > 1 ? "s" : ""}`);
-    if (guests.children > 0) parts.push(`${guests.children} Child${guests.children > 1 ? "ren" : ""}`);
-    if (guests.pets > 0) parts.push(`${guests.pets} Pet${guests.pets > 1 ? "s" : ""}`);
-    if (guests.rooms > 0) parts.push(`${guests.rooms} Room${guests.rooms > 1 ? "s" : ""}`);
-    return parts.length > 0 ? parts.join(", ") : "Add guests";
-  };
-
   if (!isOpen) return null;
 
   return (
@@ -176,8 +167,12 @@ export function GuestsSelector({ isOpen, onClose }: GuestsSelectorProps) {
   );
 }
 
-export function GuestsInput() {
-  const [isOpen, setIsOpen] = useState(false);
+interface GuestsInputProps {
+  isOpen: boolean;
+  onOpenChange: () => void;
+}
+
+export function GuestsInput({ isOpen, onOpenChange }: GuestsInputProps) {
   const [guests, setGuests] = useState({
     adults: 0,
     children: 0,
@@ -199,13 +194,13 @@ export function GuestsInput() {
       <div className="flex items-center gap-2">
         <Users className="w-5 h-5 text-gray-400" />
         <button
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={onOpenChange}
           className="flex-1 text-left text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none"
         >
           {formatGuestSummary()}
         </button>
       </div>
-      <GuestsSelector isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <GuestsSelector isOpen={isOpen} onClose={onOpenChange} />
     </div>
   );
 }
