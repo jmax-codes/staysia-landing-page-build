@@ -134,7 +134,7 @@ export function DateRangePicker({ onSelect, isOpen, onClose }: DateRangePickerPr
   if (!isOpen) return null;
 
   return (
-    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 z-50 w-full max-w-3xl">
+    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-4 z-50 w-full max-w-3xl">
       <div className="bg-white rounded-3xl shadow-2xl border border-gray-200 p-6">
         {/* Navigation */}
         <div className="flex items-center justify-between mb-4">
