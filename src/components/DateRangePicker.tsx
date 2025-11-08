@@ -25,7 +25,6 @@ export function DateRangePicker({ onSelect, isOpen, onClose }: DateRangePickerPr
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [checkIn, setCheckIn] = useState<Date | null>(null);
   const [checkOut, setCheckOut] = useState<Date | null>(null);
-  const [activeTab, setActiveTab] = useState<"dates" | "months" | "flexible">("dates");
 
   const nextMonth = addMonths(currentMonth, 1);
   const today = startOfDay(new Date());
@@ -104,10 +103,10 @@ export function DateRangePicker({ onSelect, isOpen, onClose }: DateRangePickerPr
                   relative aspect-square flex items-center justify-center text-sm font-medium
                   transition-all rounded-full
                   ${isPast ? "text-gray-300 cursor-not-allowed" : ""}
-                  ${!isPast && !isCheckInDate && !isCheckOutDate && !isInRange ? "hover:border hover:border-gray-900" : ""}
-                  ${isInRange && !isCheckInDate && !isCheckOutDate ? "bg-gray-100" : ""}
-                  ${isCheckInDate || isCheckOutDate ? "bg-gray-900 text-white z-10" : "text-gray-900"}
-                  ${isToday && !isCheckInDate && !isCheckOutDate ? "border border-gray-900" : ""}
+                  ${!isPast && !isCheckInDate && !isCheckOutDate && !isInRange ? "hover:border hover:border-[#283B73]" : ""}
+                  ${isInRange && !isCheckInDate && !isCheckOutDate ? "bg-[#283B73]/20" : ""}
+                  ${isCheckInDate || isCheckOutDate ? "bg-[#283B73] text-white z-10" : "text-gray-900"}
+                  ${isToday && !isCheckInDate && !isCheckOutDate ? "border border-[#283B73]" : ""}
                 `}
               >
                 <span className="relative z-10">{format(day, "d")}</span>
@@ -115,14 +114,14 @@ export function DateRangePicker({ onSelect, isOpen, onClose }: DateRangePickerPr
                 {/* Range background connectors */}
                 {isInRange && !isCheckInDate && !isCheckOutDate && (
                   <>
-                    <div className="absolute inset-y-0 left-0 right-0 bg-gray-100 -z-10" />
+                    <div className="absolute inset-y-0 left-0 right-0 bg-[#283B73]/20 -z-10" />
                   </>
                 )}
                 {isCheckInDate && checkOut && (
-                  <div className="absolute inset-y-0 left-1/2 right-0 bg-gray-100 -z-10" />
+                  <div className="absolute inset-y-0 left-1/2 right-0 bg-[#283B73]/20 -z-10" />
                 )}
                 {isCheckOutDate && checkIn && (
-                  <div className="absolute inset-y-0 left-0 right-1/2 bg-gray-100 -z-10" />
+                  <div className="absolute inset-y-0 left-0 right-1/2 bg-[#283B73]/20 -z-10" />
                 )}
               </button>
             );
@@ -137,77 +136,27 @@ export function DateRangePicker({ onSelect, isOpen, onClose }: DateRangePickerPr
   return (
     <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 z-50 w-full max-w-3xl">
       <div className="bg-white rounded-3xl shadow-2xl border border-gray-200 p-6">
-        {/* Tab switcher */}
-        <div className="flex items-center justify-center gap-3 mb-6">
+        {/* Navigation */}
+        <div className="flex items-center justify-between mb-4">
           <button
-            onClick={() => setActiveTab("dates")}
-            className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all ${
-              activeTab === "dates"
-                ? "bg-gray-900 text-white"
-                : "text-gray-700 hover:bg-gray-100"
-            }`}
+            onClick={() => setCurrentMonth(addMonths(currentMonth, -1))}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
           >
-            Dates
+            <ChevronLeft className="w-5 h-5" />
           </button>
           <button
-            onClick={() => setActiveTab("months")}
-            className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all ${
-              activeTab === "months"
-                ? "bg-gray-900 text-white"
-                : "text-gray-700 hover:bg-gray-100"
-            }`}
+            onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
           >
-            Months
-          </button>
-          <button
-            onClick={() => setActiveTab("flexible")}
-            className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all ${
-              activeTab === "flexible"
-                ? "bg-gray-900 text-white"
-                : "text-gray-700 hover:bg-gray-100"
-            }`}
-          >
-            Flexible
+            <ChevronRight className="w-5 h-5" />
           </button>
         </div>
 
-        {activeTab === "dates" && (
-          <>
-            {/* Navigation */}
-            <div className="flex items-center justify-between mb-4">
-              <button
-                onClick={() => setCurrentMonth(addMonths(currentMonth, -1))}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              >
-                <ChevronRight className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Two months side by side */}
-            <div className="flex gap-8">
-              {renderMonth(currentMonth)}
-              {renderMonth(nextMonth)}
-            </div>
-          </>
-        )}
-
-        {activeTab === "months" && (
-          <div className="text-center py-12 text-gray-500">
-            Select a month for your stay
-          </div>
-        )}
-
-        {activeTab === "flexible" && (
-          <div className="text-center py-12 text-gray-500">
-            Choose flexible dates
-          </div>
-        )}
+        {/* Two months side by side */}
+        <div className="flex gap-8">
+          {renderMonth(currentMonth)}
+          {renderMonth(nextMonth)}
+        </div>
       </div>
 
       {/* Backdrop */}
