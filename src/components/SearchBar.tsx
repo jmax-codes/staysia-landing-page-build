@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Calendar, Users, Search, Home, Castle, Building2, Hotel, Building, X } from "lucide-react";
+import { Calendar, Search, Home, Castle, Building2, Hotel, Building, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { LocationAutocomplete } from "./LocationAutocomplete";
 import { DateRangePicker } from "./DateRangePicker";
+import { GuestsInput } from "./GuestsSelector";
 import { format } from "date-fns";
 
 export function SearchBar() {
@@ -110,16 +111,9 @@ export function SearchBar() {
           {/* Guests */}
           <div className="px-4 py-3">
             <label className="text-xs font-semibold text-gray-700 block mb-1">
-              Guests and Rooms
+              Guests
             </label>
-            <div className="flex items-center gap-2">
-              <Users className="w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="1 Adult(s), 0 Child, 1 Room"
-                className="w-full text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none" />
-
-            </div>
+            <GuestsInput />
           </div>
 
           {/* Search Button */}
@@ -138,6 +132,6 @@ export function SearchBar() {
           onSelect={handleDateSelect}
         />
       </div>
-    </div>);
-
+    </div>
+  );
 }
