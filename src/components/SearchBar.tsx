@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Users, Search, Home, Castle, Building2, Hotel, Building } from "lucide-react";
+import { Calendar, Users, Search, Home, Castle, Building2, Hotel, Building } from "lucide-react";
 import { Button } from "./ui/button";
 import { LocationAutocomplete } from "./LocationAutocomplete";
-import { DateRangePicker } from "./DateRangePicker";
 
 export function SearchBar() {
   const [activeTab, setActiveTab] = useState("all");
@@ -63,7 +62,14 @@ export function SearchBar() {
             <label className="text-xs font-semibold text-gray-700 block mb-1">
               Check-in & Check-out Dates
             </label>
-            <DateRangePicker />
+            <div className="flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="17 Oct 2025 - 18 Oct 2025"
+                className="w-full text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none" />
+
+            </div>
           </div>
 
           {/* Guests */}
