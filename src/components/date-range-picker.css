@@ -1,0 +1,191 @@
+/* React DatePicker Custom Styles for Staysia */
+
+.staysia-datepicker {
+  font-family: 'Poppins', sans-serif;
+  border: none;
+  background: white;
+  padding: 1rem;
+}
+
+/* Header with month/year */
+.react-datepicker__header {
+  background-color: white;
+  border-bottom: none;
+  padding-top: 1rem;
+}
+
+.react-datepicker__current-month {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 1rem;
+}
+
+/* Navigation arrows */
+.react-datepicker__navigation {
+  top: 1.25rem;
+}
+
+.react-datepicker__navigation-icon::before {
+  border-color: #6b7280;
+  border-width: 2px 2px 0 0;
+  height: 8px;
+  width: 8px;
+}
+
+.react-datepicker__navigation:hover .react-datepicker__navigation-icon::before {
+  border-color: #283B73;
+}
+
+/* Day names */
+.react-datepicker__day-names {
+  margin-bottom: 0.5rem;
+}
+
+.react-datepicker__day-name {
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-weight: 500;
+  width: 2.5rem;
+  line-height: 2.5rem;
+  margin: 0.125rem;
+}
+
+/* Day cells */
+.react-datepicker__day {
+  width: 2.5rem;
+  line-height: 2.5rem;
+  margin: 0.125rem;
+  color: #1f2937;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.react-datepicker__day:hover {
+  background-color: #f3f4f6;
+  border-radius: 50%;
+}
+
+/* Disabled days (past dates) */
+.react-datepicker__day--disabled {
+  color: #d1d5db;
+  cursor: not-allowed;
+}
+
+.react-datepicker__day--disabled:hover {
+  background-color: transparent;
+}
+
+/* Selected range - start and end dates */
+.react-datepicker__day--selected,
+.react-datepicker__day--range-start,
+.react-datepicker__day--range-end {
+  background-color: #283B73 !important;
+  color: white !important;
+  font-weight: 600;
+  border-radius: 50%;
+  position: relative;
+  z-index: 2;
+}
+
+.react-datepicker__day--selected:hover,
+.react-datepicker__day--range-start:hover,
+.react-datepicker__day--range-end:hover {
+  background-color: #1f2d54 !important;
+}
+
+/* In-range dates (between start and end) */
+.react-datepicker__day--in-range {
+  background-color: #e5e7eb !important;
+  color: #1f2937 !important;
+  border-radius: 0;
+  position: relative;
+}
+
+.react-datepicker__day--in-range:hover {
+  background-color: #d1d5db !important;
+}
+
+/* Keyboard selected */
+.react-datepicker__day--keyboard-selected {
+  background-color: transparent;
+  color: #1f2937;
+}
+
+.react-datepicker__day--keyboard-selected:hover {
+  background-color: #f3f4f6;
+}
+
+/* Month containers */
+.react-datepicker__month-container {
+  padding: 0 0.5rem;
+}
+
+.react-datepicker__month {
+  margin: 0;
+}
+
+/* Week rows */
+.react-datepicker__week {
+  display: flex;
+}
+
+/* Today highlight */
+.react-datepicker__day--today {
+  font-weight: 600;
+  color: #283B73;
+}
+
+.react-datepicker__day--today:not(.react-datepicker__day--selected):not(.react-datepicker__day--range-start):not(.react-datepicker__day--range-end) {
+  background-color: transparent;
+}
+
+/* Outside month days */
+.react-datepicker__day--outside-month {
+  color: #d1d5db;
+}
+
+/* Remove default focus outline */
+.react-datepicker__day:focus {
+  outline: none;
+}
+
+/* Smooth range connection */
+.react-datepicker__day--in-selecting-range:not(.react-datepicker__day--in-range) {
+  background-color: #f3f4f6 !important;
+  color: #1f2937 !important;
+}
+
+/* Range start styling */
+.react-datepicker__day--range-start {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+/* Range end styling */
+.react-datepicker__day--range-end {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+/* Single date selected (when only start is selected) */
+.react-datepicker__day--selecting-range-start {
+  background-color: #283B73 !important;
+  color: white !important;
+  border-radius: 50%;
+}
+
+/* Make the calendar responsive */
+@media (max-width: 640px) {
+  .staysia-datepicker .react-datepicker__month-container {
+    padding: 0 0.25rem;
+  }
+  
+  .react-datepicker__day,
+  .react-datepicker__day-name {
+    width: 2rem;
+    line-height: 2rem;
+  }
+}
