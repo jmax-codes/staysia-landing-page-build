@@ -20,7 +20,7 @@ export function GuestsSelector({ isOpen, onClose }: GuestsSelectorProps) {
     adults: 0,
     children: 0,
     pets: 0,
-    rooms: 0
+    rooms: 0,
   });
 
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -44,7 +44,7 @@ export function GuestsSelector({ isOpen, onClose }: GuestsSelectorProps) {
   const updateGuest = (type: keyof GuestCounts, delta: number) => {
     setGuests((prev) => ({
       ...prev,
-      [type]: Math.max(0, prev[type] + delta)
+      [type]: Math.max(0, prev[type] + delta),
     }));
   };
 
@@ -53,8 +53,8 @@ export function GuestsSelector({ isOpen, onClose }: GuestsSelectorProps) {
   return (
     <div
       ref={dropdownRef}
-      className="absolute top-full mt-2 right-0 bg-white rounded-2xl shadow-2xl p-6 z-50 border border-gray-100 !w-0 !h-0">
-
+      className="absolute top-full mt-2 right-0 bg-white rounded-2xl shadow-2xl p-6 w-[380px] z-50 border border-gray-100"
+    >
       <div className="space-y-6">
         {/* Adults */}
         <div className="flex items-center justify-between">
@@ -66,15 +66,15 @@ export function GuestsSelector({ isOpen, onClose }: GuestsSelectorProps) {
             <button
               onClick={() => updateGuest("adults", -1)}
               disabled={guests.adults === 0}
-              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-
+              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            >
               <Minus className="w-4 h-4 text-gray-600" />
             </button>
             <span className="w-8 text-center font-medium text-gray-900">{guests.adults}</span>
             <button
               onClick={() => updateGuest("adults", 1)}
-              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 transition-colors">
-
+              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 transition-colors"
+            >
               <Plus className="w-4 h-4 text-gray-600" />
             </button>
           </div>
@@ -93,15 +93,15 @@ export function GuestsSelector({ isOpen, onClose }: GuestsSelectorProps) {
             <button
               onClick={() => updateGuest("children", -1)}
               disabled={guests.children === 0}
-              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-
+              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            >
               <Minus className="w-4 h-4 text-gray-600" />
             </button>
             <span className="w-8 text-center font-medium text-gray-900">{guests.children}</span>
             <button
               onClick={() => updateGuest("children", 1)}
-              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 transition-colors">
-
+              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 transition-colors"
+            >
               <Plus className="w-4 h-4 text-gray-600" />
             </button>
           </div>
@@ -122,15 +122,15 @@ export function GuestsSelector({ isOpen, onClose }: GuestsSelectorProps) {
             <button
               onClick={() => updateGuest("pets", -1)}
               disabled={guests.pets === 0}
-              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-
+              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            >
               <Minus className="w-4 h-4 text-gray-600" />
             </button>
             <span className="w-8 text-center font-medium text-gray-900">{guests.pets}</span>
             <button
               onClick={() => updateGuest("pets", 1)}
-              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 transition-colors">
-
+              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 transition-colors"
+            >
               <Plus className="w-4 h-4 text-gray-600" />
             </button>
           </div>
@@ -149,22 +149,22 @@ export function GuestsSelector({ isOpen, onClose }: GuestsSelectorProps) {
             <button
               onClick={() => updateGuest("rooms", -1)}
               disabled={guests.rooms === 0}
-              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-
+              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            >
               <Minus className="w-4 h-4 text-gray-600" />
             </button>
             <span className="w-8 text-center font-medium text-gray-900">{guests.rooms}</span>
             <button
               onClick={() => updateGuest("rooms", 1)}
-              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 transition-colors">
-
+              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 transition-colors"
+            >
               <Plus className="w-4 h-4 text-gray-600" />
             </button>
           </div>
         </div>
       </div>
-    </div>);
-
+    </div>
+  );
 }
 
 interface GuestsInputProps {
@@ -177,7 +177,7 @@ export function GuestsInput({ isOpen, onOpenChange }: GuestsInputProps) {
     adults: 0,
     children: 0,
     pets: 0,
-    rooms: 0
+    rooms: 0,
   });
 
   const formatGuestSummary = () => {
@@ -195,12 +195,12 @@ export function GuestsInput({ isOpen, onOpenChange }: GuestsInputProps) {
         <Users className="w-5 h-5 text-gray-400" />
         <button
           onClick={onOpenChange}
-          className="flex-1 text-left text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none">
-
+          className="flex-1 text-left text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none"
+        >
           {formatGuestSummary()}
         </button>
       </div>
       <GuestsSelector isOpen={isOpen} onClose={onOpenChange} />
-    </div>);
-
+    </div>
+  );
 }
