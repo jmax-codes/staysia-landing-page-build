@@ -14,9 +14,9 @@ export default function AuthPage() {
         {/* Logo */}
         <Link href="/" className="flex items-center justify-center gap-2 mb-8">
           <div className="w-12 h-12 rounded-xl bg-[#FFB400] flex items-center justify-center">
-            <span className="font-bold text-2xl text-white">S</span>
+            <span className="font-bold text-2xl text-white"></span>
           </div>
-          <span className="text-3xl font-bold text-white">Staysia</span>
+          <span className="text-3xl font-bold text-white !whitespace-pre-line"></span>
         </Link>
 
         {/* Auth Card */}
@@ -26,43 +26,43 @@ export default function AuthPage() {
             <button
               onClick={() => setMode("login")}
               className={`flex-1 py-2.5 rounded-md font-semibold transition-all ${
-                mode === "login"
-                  ? "bg-white text-[#283B73] shadow-sm"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
-            >
+              mode === "login" ?
+              "bg-white text-[#283B73] shadow-sm" :
+              "text-gray-600 hover:text-gray-900"}`
+              }>
+
               Log In
             </button>
             <button
               onClick={() => setMode("register")}
               className={`flex-1 py-2.5 rounded-md font-semibold transition-all ${
-                mode === "register"
-                  ? "bg-white text-[#283B73] shadow-sm"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
-            >
+              mode === "register" ?
+              "bg-white text-[#283B73] shadow-sm" :
+              "text-gray-600 hover:text-gray-900"}`
+              }>
+
               Sign Up
             </button>
           </div>
 
           {/* Forms */}
-          {mode === "login" ? (
-            <LoginForm onSwitchToRegister={() => setMode("register")} />
-          ) : (
-            <RegisterForm onSwitchToLogin={() => setMode("login")} />
-          )}
+          {mode === "login" ?
+          <LoginForm onSwitchToRegister={() => setMode("register")} /> :
+
+          <RegisterForm onSwitchToLogin={() => setMode("login")} />
+          }
         </div>
 
         {/* Back to Home */}
         <div className="text-center mt-6">
           <Link
             href="/"
-            className="text-white/80 hover:text-white transition-colors text-sm"
-          >
+            className="text-white/80 hover:text-white transition-colors text-sm">
+
             ← Back to Home
           </Link>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }
