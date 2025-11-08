@@ -120,7 +120,7 @@ export function Navbar() {
           <div className="hidden lg:flex items-center gap-8 xl:gap-12">
             <Link
               href="#stays"
-              className={`font-medium text-lg tracking-wide transition-colors duration-300 !w-12 !h-6 ${
+              className={`font-medium text-lg tracking-wide transition-colors duration-300 !w-[46px] !h-[27px] ${
               isScrolled ?
               "text-gray-700 hover:text-[#283B73]" :
               "text-white/90 hover:text-white"}`
