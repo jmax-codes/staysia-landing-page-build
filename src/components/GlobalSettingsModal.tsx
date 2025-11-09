@@ -7,6 +7,7 @@ import { useGlobalStore } from "@/store/useGlobalStore";
 import { languages } from "@/data/languages";
 import { regions } from "@/data/regions";
 import { currencies } from "@/data/currencies";
+import { useTranslation } from "react-i18next";
 
 interface GlobalSettingsModalProps {
   isOpen: boolean;
@@ -14,12 +15,13 @@ interface GlobalSettingsModalProps {
 }
 
 export function GlobalSettingsModal({ isOpen, onClose }: GlobalSettingsModalProps) {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<"language" | "region" | "currency">("language");
   const { language, region, currency, setLanguage, setRegion, setCurrency } = useGlobalStore();
 
   const tabs = [
-  { id: "language" as const, label: "Language" },
-  { id: "currency" as const, label: "Currency" }];
+  { id: "language" as const, label: t('navbar.language') },
+  { id: "currency" as const, label: t('navbar.currency') }];
 
 
   return (
@@ -99,11 +101,11 @@ export function GlobalSettingsModal({ isOpen, onClose }: GlobalSettingsModalProp
                         <div className="flex items-center justify-between">
                           <div>
                             <h3 className="font-semibold text-gray-900 mb-1 flex items-center gap-2">
-                              Translation
+                              {t('navbar.translation')}
                               <span className="text-gray-600">🌐</span>
                             </h3>
                             <p className="text-sm text-gray-600">
-                              Automatically translate descriptions and reviews to English.
+                              {t('navbar.translationDescription')}
                             </p>
                           </div>
                           <div className="w-14 h-8 bg-gray-900 rounded-full p-1 flex items-center justify-end">
@@ -115,7 +117,7 @@ export function GlobalSettingsModal({ isOpen, onClose }: GlobalSettingsModalProp
                       </div>
 
                       {/* Language Selection */}
-                      <h2 className="text-2xl font-semibold text-gray-900 mb-6">Choose a language</h2>
+                      <h2 className="text-2xl font-semibold text-gray-900 mb-6">{t('navbar.chooseLanguage')}</h2>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                         {languages.map((lang) =>
                     <button
@@ -150,7 +152,7 @@ export function GlobalSettingsModal({ isOpen, onClose }: GlobalSettingsModalProp
                   exit={{ opacity: 0, x: 20 }}
                   transition={{ duration: 0.3 }}>
 
-                      <h2 className="text-2xl font-semibold text-gray-900 mb-6">Choose a currency</h2>
+                      <h2 className="text-2xl font-semibold text-gray-900 mb-6">{t('navbar.chooseCurrency')}</h2>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                         {currencies.map((curr) =>
                     <button

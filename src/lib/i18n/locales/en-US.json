@@ -7,6 +7,7 @@
     "locationPlaceholder": "Where are you going?",
     "checkIn": "Check in",
     "checkOut": "Check out",
+    "when": "When",
     "guests": "Guests",
     "guestsPlaceholder": "Add guests",
     "adults": "Adults",
@@ -21,8 +22,23 @@
       "house": "House",
       "condo": "Condo",
       "penthouse": "Penthouse",
-      "townhouse": "Townhouse"
+      "townhouse": "Townhouse",
+      "hotel": "Hotel"
     }
+  },
+  "navbar": {
+    "becomeHost": "Become a host",
+    "language": "Language",
+    "currency": "Currency",
+    "chooseLanguage": "Choose a language",
+    "chooseCurrency": "Choose a currency",
+    "translation": "Translation",
+    "translationDescription": "Automatically translate descriptions and reviews to English.",
+    "loginSignup": "Log in or Sign up",
+    "profile": "Profile",
+    "accountSettings": "Account Settings",
+    "helpCenter": "Help Center",
+    "logout": "Log out"
   },
   "propertyCard": {
     "guestFavorite": "Guest favorite",
@@ -83,6 +99,11 @@
     "peakSeason": "Peak Season",
     "soldOut": "Sold Out",
     "selectDates": "Select your dates",
-    "checkAvailability": "Check availability and pricing for your stay"
+    "checkAvailability": "Check availability and pricing for your stay",
+    "clearDates": "Clear Dates",
+    "confirmSelection": "Confirm Selection",
+    "totalPrice": "Total Price",
+    "nights": "{{count}} night",
+    "nights_plural": "{{count}} nights"
   }
 }

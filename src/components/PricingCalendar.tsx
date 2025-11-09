@@ -60,6 +60,29 @@ export function PricingCalendar({ propertyId, pricingData, basePrice }: PricingC
     return converted.toString();
   };
 
+  // Calculate total price for selected dates
+  const calculateTotalPrice = () => {
+    if (!selectedCheckIn || !selectedCheckOut) return null;
+
+    const checkInDate = new Date(selectedCheckIn);
+    const checkOutDate = new Date(selectedCheckOut);
+    let totalPrice = 0;
+    let nights = 0;
+
+    const currentDate = new Date(checkInDate);
+    while (currentDate < checkOutDate) {
+      const dateString = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, "0")}-${String(currentDate.getDate()).padStart(2, "0")}`;
+      const pricing = pricingMap.get(dateString);
+      totalPrice += pricing?.price || basePrice;
+      nights++;
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return { totalPrice, nights };
+  };
+
+  const totalPriceData = calculateTotalPrice();
+
   const getDaysInMonth = (date: Date) => {
     const year = date.getFullYear();
     const month = date.getMonth();
@@ -174,6 +197,21 @@ export function PricingCalendar({ propertyId, pricingData, basePrice }: PricingC
             )}
           </div>
         </div>
+
+        {/* Total Price Display */}
+        {totalPriceData && (
+          <div className="bg-[#283B73] text-white rounded-lg p-4 mb-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm opacity-90">{t('calendar.totalPrice')}</p>
+                <p className="text-xs opacity-75 mt-1">
+                  {totalPriceData.nights} {totalPriceData.nights === 1 ? t('calendar.nights') : t('calendar.nights_plural', { count: totalPriceData.nights })}
+                </p>
+              </div>
+              <p className="text-2xl font-bold">{formatPrice(totalPriceData.totalPrice)}</p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Legend */}
@@ -284,14 +322,14 @@ export function PricingCalendar({ propertyId, pricingData, basePrice }: PricingC
           className="flex-1"
           disabled={!selectedCheckIn && !selectedCheckOut}
         >
-          Clear Dates
+          {t('calendar.clearDates')}
         </Button>
         <Button
           onClick={handleConfirmSelection}
           className="flex-1 bg-[#283B73] hover:bg-[#1e2d5a] text-white"
           disabled={!selectedCheckIn || !selectedCheckOut}
         >
-          Confirm Selection
+          {t('calendar.confirmSelection')}
         </Button>
       </div>
     </div>

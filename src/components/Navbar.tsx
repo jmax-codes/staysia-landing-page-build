@@ -9,6 +9,7 @@ import { gsap } from "gsap";
 import { useSession, authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,6 +19,7 @@ import {
 "@/components/ui/dropdown-menu";
 
 export function Navbar() {
+  const { t } = useTranslation();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const navRef = useRef<HTMLElement>(null);
@@ -90,7 +92,6 @@ export function Navbar() {
     if (!session?.user) {
       router.push("/auth?redirect=" + encodeURIComponent("/"));
     } else {
-      // TODO: Navigate to host dashboard when implemented
       toast.info("Host dashboard coming soon!");
     }
   };
@@ -171,7 +172,7 @@ export function Navbar() {
               "bg-white text-[#283B73] hover:bg-white/90"}`
               }>
 
-              Become a host
+              {t('navbar.becomeHost')}
             </Button>
             <button
               onClick={() => setIsSettingsOpen(true)}
@@ -209,19 +210,19 @@ export function Navbar() {
                     </div>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="cursor-pointer">
-                      Profile
+                      {t('navbar.profile')}
                     </DropdownMenuItem>
                     <DropdownMenuItem className="cursor-pointer">
-                      Account Settings
+                      {t('navbar.accountSettings')}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                     onClick={handleBecomeHostClick}
                     className="cursor-pointer">
 
-                      Become a Host
+                      {t('navbar.becomeHost')}
                     </DropdownMenuItem>
                     <DropdownMenuItem className="cursor-pointer">
-                      Help Center
+                      {t('navbar.helpCenter')}
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
@@ -229,7 +230,7 @@ export function Navbar() {
                     className="cursor-pointer text-red-600 focus:text-red-600">
 
                       <LogOut className="w-4 h-4 mr-2" />
-                      Log out
+                      {t('navbar.logout')}
                     </DropdownMenuItem>
                   </> :
 
@@ -238,16 +239,16 @@ export function Navbar() {
                     onClick={() => router.push("/auth")}
                     className="cursor-pointer font-semibold">
 
-                      Log in or Sign up
+                      {t('navbar.loginSignup')}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                     onClick={handleBecomeHostClick}
                     className="cursor-pointer">
 
-                      Become a Host
+                      {t('navbar.becomeHost')}
                     </DropdownMenuItem>
                     <DropdownMenuItem className="cursor-pointer">
-                      Help Center
+                      {t('navbar.helpCenter')}
                     </DropdownMenuItem>
                   </>
                 }
@@ -288,19 +289,19 @@ export function Navbar() {
                     </div>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="cursor-pointer">
-                      Profile
+                      {t('navbar.profile')}
                     </DropdownMenuItem>
                     <DropdownMenuItem className="cursor-pointer">
-                      Account Settings
+                      {t('navbar.accountSettings')}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                     onClick={handleBecomeHostClick}
                     className="cursor-pointer">
 
-                      Become a Host
+                      {t('navbar.becomeHost')}
                     </DropdownMenuItem>
                     <DropdownMenuItem className="cursor-pointer">
-                      Help Center
+                      {t('navbar.helpCenter')}
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
@@ -308,7 +309,7 @@ export function Navbar() {
                     className="cursor-pointer text-red-600 focus:text-red-600">
 
                       <LogOut className="w-4 h-4 mr-2" />
-                      Log out
+                      {t('navbar.logout')}
                     </DropdownMenuItem>
                   </> :
 
@@ -317,16 +318,16 @@ export function Navbar() {
                     onClick={() => router.push("/auth")}
                     className="cursor-pointer font-semibold">
 
-                      Log in or Sign up
+                      {t('navbar.loginSignup')}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                     onClick={handleBecomeHostClick}
                     className="cursor-pointer">
 
-                      Become a Host
+                      {t('navbar.becomeHost')}
                     </DropdownMenuItem>
                     <DropdownMenuItem className="cursor-pointer">
-                      Help Center
+                      {t('navbar.helpCenter')}
                     </DropdownMenuItem>
                   </>
                 }
