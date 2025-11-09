@@ -115,8 +115,8 @@ export function PropertyDetailClient({ data }: PropertyDetailClientProps) {
         </div>
       </div>
 
-      {/* Main Content with proper spacing from navbar - increased to pt-48 */}
-      <div className="pt-48 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Main Content with proper spacing from navbar */}
+      <div className="pt-100 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Title Section */}
         <div className="mb-6">
           <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
