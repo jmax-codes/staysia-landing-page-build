@@ -6,21 +6,22 @@ import { Users, Minus, Plus } from "lucide-react";
 interface GuestCounts {
   adults: number;
   children: number;
+  infants: number;
   pets: number;
-  rooms: number;
 }
 
 interface GuestsSelectorProps {
   isOpen: boolean;
   onClose: () => void;
+  onGuestsChange?: (guests: GuestCounts) => void;
 }
 
-export function GuestsSelector({ isOpen, onClose }: GuestsSelectorProps) {
+export function GuestsSelector({ isOpen, onClose, onGuestsChange }: GuestsSelectorProps) {
   const [guests, setGuests] = useState<GuestCounts>({
     adults: 0,
     children: 0,
-    pets: 0,
-    rooms: 0
+    infants: 0,
+    pets: 0
   });
 
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -42,10 +43,14 @@ export function GuestsSelector({ isOpen, onClose }: GuestsSelectorProps) {
   }, [isOpen, onClose]);
 
   const updateGuest = (type: keyof GuestCounts, delta: number) => {
-    setGuests((prev) => ({
-      ...prev,
-      [type]: Math.max(0, prev[type] + delta)
-    }));
+    setGuests((prev) => {
+      const newGuests = {
+        ...prev,
+        [type]: Math.max(0, prev[type] + delta)
+      };
+      onGuestsChange?.(newGuests);
+      return newGuests;
+    });
   };
 
   if (!isOpen) return null;
@@ -87,7 +92,7 @@ export function GuestsSelector({ isOpen, onClose }: GuestsSelectorProps) {
         <div className="flex items-center justify-between">
           <div>
             <div className="text-base font-semibold text-gray-900">Children</div>
-            <div className="text-sm text-gray-500 !whitespace-pre-line">Ages 0–12</div>
+            <div className="text-sm text-gray-500">Ages 2–12</div>
           </div>
           <div className="flex items-center gap-3">
             <button
@@ -100,6 +105,33 @@ export function GuestsSelector({ isOpen, onClose }: GuestsSelectorProps) {
             <span className="w-8 text-center font-medium text-gray-900">{guests.children}</span>
             <button
               onClick={() => updateGuest("children", 1)}
+              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 transition-colors">
+
+              <Plus className="w-4 h-4 text-gray-600" />
+            </button>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="border-t border-gray-200" />
+
+        {/* Infants */}
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="text-base font-semibold text-gray-900">Infants</div>
+            <div className="text-sm text-gray-500">Under 2</div>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => updateGuest("infants", -1)}
+              disabled={guests.infants === 0}
+              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+
+              <Minus className="w-4 h-4 text-gray-600" />
+            </button>
+            <span className="w-8 text-center font-medium text-gray-900">{guests.infants}</span>
+            <button
+              onClick={() => updateGuest("infants", 1)}
               className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 transition-colors">
 
               <Plus className="w-4 h-4 text-gray-600" />
@@ -135,33 +167,6 @@ export function GuestsSelector({ isOpen, onClose }: GuestsSelectorProps) {
             </button>
           </div>
         </div>
-
-        {/* Divider */}
-        <div className="border-t border-gray-200" />
-
-        {/* Rooms */}
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="text-base font-semibold text-gray-900">Rooms</div>
-            <div className="text-sm text-gray-500">Number of rooms</div>
-          </div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => updateGuest("rooms", -1)}
-              disabled={guests.rooms === 0}
-              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-
-              <Minus className="w-4 h-4 text-gray-600" />
-            </button>
-            <span className="w-8 text-center font-medium text-gray-900">{guests.rooms}</span>
-            <button
-              onClick={() => updateGuest("rooms", 1)}
-              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 transition-colors">
-
-              <Plus className="w-4 h-4 text-gray-600" />
-            </button>
-          </div>
-        </div>
       </div>
     </div>);
 
@@ -170,22 +175,28 @@ export function GuestsSelector({ isOpen, onClose }: GuestsSelectorProps) {
 interface GuestsInputProps {
   isOpen: boolean;
   onOpenChange: () => void;
+  onGuestsChange?: (guests: GuestCounts) => void;
 }
 
-export function GuestsInput({ isOpen, onOpenChange }: GuestsInputProps) {
+export function GuestsInput({ isOpen, onOpenChange, onGuestsChange }: GuestsInputProps) {
   const [guests, setGuests] = useState({
     adults: 0,
     children: 0,
-    pets: 0,
-    rooms: 0
+    infants: 0,
+    pets: 0
   });
+
+  const handleGuestsChange = (newGuests: GuestCounts) => {
+    setGuests(newGuests);
+    onGuestsChange?.(newGuests);
+  };
 
   const formatGuestSummary = () => {
     const parts = [];
     if (guests.adults > 0) parts.push(`${guests.adults} Adult${guests.adults > 1 ? "s" : ""}`);
     if (guests.children > 0) parts.push(`${guests.children} Child${guests.children > 1 ? "ren" : ""}`);
+    if (guests.infants > 0) parts.push(`${guests.infants} Infant${guests.infants > 1 ? "s" : ""}`);
     if (guests.pets > 0) parts.push(`${guests.pets} Pet${guests.pets > 1 ? "s" : ""}`);
-    if (guests.rooms > 0) parts.push(`${guests.rooms} Room${guests.rooms > 1 ? "s" : ""}`);
     return parts.length > 0 ? parts.join(", ") : "Add guests";
   };
 
@@ -200,7 +211,7 @@ export function GuestsInput({ isOpen, onOpenChange }: GuestsInputProps) {
           {formatGuestSummary()}
         </button>
       </div>
-      <GuestsSelector isOpen={isOpen} onClose={onOpenChange} />
+      <GuestsSelector isOpen={isOpen} onClose={onOpenChange} onGuestsChange={handleGuestsChange} />
     </div>);
 
 }
