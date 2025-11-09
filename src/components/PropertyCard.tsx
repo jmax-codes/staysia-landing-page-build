@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Heart, Star } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
@@ -16,6 +17,8 @@ interface PropertyCardProps {
   rating: number;
   imageUrl: string;
   isGuestFavorite: boolean;
+  reviewCount?: number;
+  cardType?: "property" | "car";
 }
 
 export function PropertyCard({
@@ -28,7 +31,10 @@ export function PropertyCard({
   rating,
   imageUrl,
   isGuestFavorite: initialFavorite,
+  reviewCount = 0,
+  cardType = "property",
 }: PropertyCardProps) {
+  const router = useRouter();
   const [isFavorite, setIsFavorite] = useState(initialFavorite);
   const [isHovered, setIsHovered] = useState(false);
   const { selectedCurrency, exchangeRate } = useCurrency();
@@ -52,6 +58,14 @@ export function PropertyCard({
     }
   };
 
+  const handleClick = () => {
+    if (cardType === "car") {
+      router.push(`/cars/${id}`);
+    } else {
+      router.push(`/properties/${id}`);
+    }
+  };
+
   // Convert price from IDR to selected currency
   const convertedPrice = price * exchangeRate;
   
@@ -63,11 +77,14 @@ export function PropertyCard({
     maximumFractionDigits: 0,
   }).format(convertedPrice);
 
+  const priceLabel = cardType === "car" ? "per day" : `for ${nights} nights`;
+
   return (
     <div
       className="group relative flex-shrink-0 w-[280px] sm:w-[320px] cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={handleClick}
     >
       <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
         {/* Image Container */}
@@ -122,13 +139,20 @@ export function PropertyCard({
             </div>
           </div>
 
+          {/* Review count */}
+          {reviewCount > 0 && (
+            <p className="text-xs text-gray-500 mb-2">
+              {reviewCount} {reviewCount === 1 ? "review" : "reviews"}
+            </p>
+          )}
+
           <div className="mt-3 pt-3 border-t border-gray-100">
             <div className="flex items-baseline gap-1">
               <span className="text-lg font-bold text-gray-900">
                 {formattedPrice}
               </span>
               <span className="text-sm text-gray-600">
-                for {nights} nights
+                {priceLabel}
               </span>
             </div>
           </div>

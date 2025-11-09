@@ -16,14 +16,16 @@ interface Property {
   rating: number;
   imageUrl: string;
   isGuestFavorite: boolean;
+  reviewCount?: number;
 }
 
 interface PropertyCarouselProps {
   title: string;
   properties: Property[];
+  type?: "property" | "car";
 }
 
-export function PropertyCarousel({ title, properties }: PropertyCarouselProps) {
+export function PropertyCarousel({ title, properties, type = "property" }: PropertyCarouselProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
@@ -46,7 +48,7 @@ export function PropertyCarousel({ title, properties }: PropertyCarouselProps) {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl lg:text-3xl font-bold text-gray-900">
-            {title} <span className="text-[#FFB400]">›</span>
+            {title}
           </h2>
           
           {/* Navigation Buttons */}
@@ -80,7 +82,12 @@ export function PropertyCarousel({ title, properties }: PropertyCarouselProps) {
           }}
         >
           {properties.map((property) => (
-            <PropertyCard key={property.id} {...property} />
+            <PropertyCard 
+              key={property.id} 
+              {...property} 
+              reviewCount={property.reviewCount || 0}
+              cardType={type} 
+            />
           ))}
         </div>
       </div>

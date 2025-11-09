@@ -1,13 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
-import { properties } from '@/db/schema';
-import { eq, like, sql } from 'drizzle-orm';
+import { properties, reviews } from '@/db/schema';
+import { eq, like, sql, and, gte, lte, desc, asc } from 'drizzle-orm';
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
     const city = searchParams.get('city');
+    const type = searchParams.get('type');
+    const minPrice = searchParams.get('minPrice');
+    const maxPrice = searchParams.get('maxPrice');
+    const adults = searchParams.get('adults');
+    const children = searchParams.get('children');
+    const pets = searchParams.get('pets');
+    const roomsParam = searchParams.get('rooms');
+    const sortBy = searchParams.get('sortBy') || 'name';
+    const search = searchParams.get('search');
     const limit = Math.min(parseInt(searchParams.get('limit') ?? '50'), 100);
     const offset = parseInt(searchParams.get('offset') ?? '0');
 
@@ -36,26 +45,110 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(property[0], { status: 200 });
     }
 
-    // Filter by city with pagination
+    // Build filters array
+    const filters = [];
+    
     if (city) {
-      const filteredProperties = await db
-        .select()
-        .from(properties)
-        .where(sql`lower(${properties.city}) = lower(${city})`)
-        .limit(limit)
-        .offset(offset);
-
-      return NextResponse.json(filteredProperties, { status: 200 });
+      filters.push(sql`lower(${properties.city}) = lower(${city})`);
+    }
+    
+    if (type) {
+      filters.push(sql`lower(${properties.type}) = lower(${type})`);
+    }
+    
+    if (minPrice) {
+      const minPriceNum = parseInt(minPrice);
+      if (!isNaN(minPriceNum)) {
+        filters.push(gte(properties.price, minPriceNum));
+      }
+    }
+    
+    if (maxPrice) {
+      const maxPriceNum = parseInt(maxPrice);
+      if (!isNaN(maxPriceNum)) {
+        filters.push(lte(properties.price, maxPriceNum));
+      }
+    }
+    
+    if (adults || children) {
+      const totalGuests = (parseInt(adults || '0') || 0) + (parseInt(children || '0') || 0);
+      if (totalGuests > 0) {
+        filters.push(gte(properties.maxGuests, totalGuests));
+      }
+    }
+    
+    if (pets === 'true') {
+      filters.push(eq(properties.petsAllowed, true));
+    }
+    
+    if (roomsParam) {
+      const roomsNum = parseInt(roomsParam);
+      if (!isNaN(roomsNum) && roomsNum > 0) {
+        filters.push(gte(properties.bedrooms, roomsNum));
+      }
+    }
+    
+    if (search) {
+      filters.push(
+        sql`lower(${properties.name}) LIKE lower(${'%' + search + '%'})`
+      );
     }
 
-    // Return all properties with pagination
-    const allProperties = await db
-      .select()
-      .from(properties)
-      .limit(limit)
-      .offset(offset);
+    // Build query - prioritize Indonesian properties
+    let query = db.select().from(properties);
+    
+    if (filters.length > 0) {
+      query = query.where(and(...filters));
+    }
+    
+    // Apply sorting with Indonesian priority
+    if (sortBy === 'price_asc') {
+      query = query.orderBy(
+        sql`CASE WHEN lower(${properties.country}) = 'indonesia' THEN 0 ELSE 1 END`,
+        asc(properties.price)
+      );
+    } else if (sortBy === 'price_desc') {
+      query = query.orderBy(
+        sql`CASE WHEN lower(${properties.country}) = 'indonesia' THEN 0 ELSE 1 END`,
+        desc(properties.price)
+      );
+    } else if (sortBy === 'rating') {
+      query = query.orderBy(
+        sql`CASE WHEN lower(${properties.country}) = 'indonesia' THEN 0 ELSE 1 END`,
+        desc(properties.rating)
+      );
+    } else {
+      // Default: prioritize Indonesia first, then sort by name
+      query = query.orderBy(
+        sql`CASE WHEN lower(${properties.country}) = 'indonesia' THEN 0 ELSE 1 END`,
+        asc(properties.name)
+      );
+    }
+    
+    const results = await query.limit(limit).offset(offset);
 
-    return NextResponse.json(allProperties, { status: 200 });
+    // For each property, fetch review count and calculate average rating
+    const propertiesWithReviews = await Promise.all(
+      results.map(async (property) => {
+        const propertyReviews = await db
+          .select()
+          .from(reviews)
+          .where(eq(reviews.propertyId, property.id));
+
+        const reviewCount = propertyReviews.length;
+        const avgRating = reviewCount > 0
+          ? propertyReviews.reduce((acc, r) => acc + r.rating, 0) / reviewCount
+          : property.rating;
+
+        return {
+          ...property,
+          rating: avgRating,
+          reviewCount,
+        };
+      })
+    );
+
+    return NextResponse.json(propertiesWithReviews, { status: 200 });
   } catch (error) {
     console.error('GET error:', error);
     return NextResponse.json(
@@ -68,7 +161,9 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, city, area, type, price, rating, imageUrl, nights, isGuestFavorite } = body;
+    const { name, city, area, type, price, rating, imageUrl, nights, isGuestFavorite, 
+            description, address, country, latitude, longitude, bedrooms, bathrooms, 
+            maxGuests, petsAllowed, checkInTime, checkOutTime, images, amenities } = body;
 
     // Validate required fields
     if (!name || typeof name !== 'string' || name.trim() === '') {
@@ -168,6 +263,19 @@ export async function POST(request: NextRequest) {
         rating: ratingNum,
         imageUrl: imageUrl.trim(),
         isGuestFavorite: isGuestFavoriteValue,
+        description: description?.trim() || null,
+        address: address?.trim() || null,
+        country: country?.trim() || null,
+        latitude: latitude ? parseFloat(latitude) : null,
+        longitude: longitude ? parseFloat(longitude) : null,
+        bedrooms: bedrooms ? parseInt(bedrooms) : null,
+        bathrooms: bathrooms ? parseInt(bathrooms) : null,
+        maxGuests: maxGuests ? parseInt(maxGuests) : null,
+        petsAllowed: petsAllowed === true || petsAllowed === 1 ? true : false,
+        checkInTime: checkInTime?.trim() || null,
+        checkOutTime: checkOutTime?.trim() || null,
+        images: images || null,
+        amenities: amenities || null,
         createdAt: timestamp,
         updatedAt: timestamp,
       })

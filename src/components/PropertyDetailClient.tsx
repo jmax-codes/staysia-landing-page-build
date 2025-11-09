@@ -99,9 +99,9 @@ export function PropertyDetailClient({ data }: PropertyDetailClientProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA]">
+    <div className="min-h-screen bg-[#FAFAFA] pt-20">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-40">
+      <div className="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <button
             onClick={() => router.back()}
@@ -123,7 +123,7 @@ export function PropertyDetailClient({ data }: PropertyDetailClientProps) {
             <div className="flex items-center gap-1">
               <Star className="w-4 h-4 fill-gray-900 text-gray-900" />
               <span className="font-semibold">{property.rating.toFixed(2)}</span>
-              <span className="text-gray-600">({reviews.length} reviews)</span>
+              <span className="text-gray-600">({reviews.length} {reviews.length === 1 ? "review" : "reviews"})</span>
             </div>
             <div className="flex items-center gap-1 text-gray-600">
               <MapPin className="w-4 h-4" />

@@ -81,8 +81,19 @@ export function PricingCalendar({ propertyId, pricingData, basePrice }: PricingC
     setCurrentMonth(new Date(year, month + 1, 1));
   };
 
+  const isPastDate = (dateString: string) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const checkDate = new Date(dateString);
+    return checkDate < today;
+  };
+
   const handleDateClick = (day: number) => {
     const dateString = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    
+    // Disable past dates for check-in
+    if (isPastDate(dateString)) return;
+    
     const pricing = pricingMap.get(dateString);
 
     if (pricing?.status === "sold_out") return;
@@ -230,6 +241,7 @@ export function PricingCalendar({ propertyId, pricingData, basePrice }: PricingC
             const pricing = pricingMap.get(dateString);
             const status = pricing?.status || "available";
             const price = pricing?.price || basePrice;
+            const isPast = isPastDate(dateString);
 
             const isCheckIn = selectedCheckIn === dateString;
             const isCheckOut = selectedCheckOut === dateString;
@@ -239,9 +251,11 @@ export function PricingCalendar({ propertyId, pricingData, basePrice }: PricingC
               <button
                 key={day}
                 onClick={() => handleDateClick(day)}
-                disabled={status === "sold_out"}
+                disabled={status === "sold_out" || isPast}
                 className={`aspect-square border rounded-lg p-1 flex flex-col items-center justify-center text-center transition-all ${
-                  STATUS_COLORS[status as keyof typeof STATUS_COLORS]
+                  isPast
+                    ? "bg-gray-50 text-gray-300 cursor-not-allowed border-gray-200"
+                    : STATUS_COLORS[status as keyof typeof STATUS_COLORS]
                 } ${
                   isCheckIn || isCheckOut
                     ? "ring-2 ring-[#283B73] ring-offset-2"
@@ -252,7 +266,7 @@ export function PricingCalendar({ propertyId, pricingData, basePrice }: PricingC
               >
                 <span className="text-sm font-semibold">{day}</span>
                 <span className="text-[10px] leading-tight">
-                  {status === "sold_out" ? "✕" : formatShortPrice(price)}
+                  {status === "sold_out" || isPast ? "✕" : formatShortPrice(price)}
                 </span>
               </button>
             );
