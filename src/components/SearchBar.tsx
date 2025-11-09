@@ -8,17 +8,34 @@ import { DateRangePicker } from "./DateRangePicker";
 import { GuestsInput } from "./GuestsSelector";
 import { format } from "date-fns";
 
-export function SearchBar() {
+interface SearchFilters {
+  location?: string;
+  category?: string;
+  checkIn?: Date | null;
+  checkOut?: Date | null;
+  adults?: number;
+  children?: number;
+  pets?: number;
+  rooms?: number;
+}
+
+interface SearchBarProps {
+  onSearch?: (filters: SearchFilters) => void;
+}
+
+export function SearchBar({ onSearch }: SearchBarProps) {
   const [activeTab, setActiveTab] = useState("all");
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isGuestsOpen, setIsGuestsOpen] = useState(false);
   const [checkIn, setCheckIn] = useState<Date | null>(null);
   const [checkOut, setCheckOut] = useState<Date | null>(null);
+  const [location, setLocation] = useState("");
+  const [guestsData, setGuestsData] = useState({ adults: 0, children: 0, infants: 0, pets: 0 });
 
   const categories = [
   { id: "all", label: "All", icon: null, color: null },
-  { id: "houses", label: "Houses", icon: Home, color: "#FF6B6B" },
-  { id: "villas", label: "Villas", icon: Castle, color: "#4ECDC4" },
+  { id: "houses", label: "House", icon: Home, color: "#FF6B6B" },
+  { id: "villas", label: "Villa", icon: Castle, color: "#4ECDC4" },
   { id: "apartment", label: "Apartment", icon: Building2, color: "#95E1D3" },
   { id: "hotels", label: "Hotels", icon: Hotel, color: "#F38181" },
   { id: "condos", label: "Condos", icon: Building, color: "#AA96DA" },
@@ -46,15 +63,38 @@ export function SearchBar() {
   const handleCalendarToggle = () => {
     setIsCalendarOpen(!isCalendarOpen);
     if (!isCalendarOpen) {
-      setIsGuestsOpen(false); // Close guests when opening calendar
+      setIsGuestsOpen(false);
     }
   };
 
   const handleGuestsToggle = () => {
     setIsGuestsOpen(!isGuestsOpen);
     if (!isGuestsOpen) {
-      setIsCalendarOpen(false); // Close calendar when opening guests
+      setIsCalendarOpen(false);
     }
+  };
+
+  const handleSearch = () => {
+    const filters: SearchFilters = {
+      location: location || undefined,
+      category: activeTab !== "all" ? activeTab : undefined,
+      checkIn,
+      checkOut,
+      adults: guestsData.adults || undefined,
+      children: guestsData.children || undefined,
+      pets: guestsData.pets || undefined,
+      rooms: undefined // Can be derived from guests if needed
+    };
+
+    onSearch?.(filters);
+  };
+
+  const handleLocationChange = (value: string) => {
+    setLocation(value);
+  };
+
+  const handleGuestsChange = (data: {adults: number;children: number;infants: number;pets: number;}) => {
+    setGuestsData(data);
   };
 
   return (
@@ -79,7 +119,7 @@ export function SearchBar() {
                 style={{ color: category.color }} />
 
               }
-              <span className="text-sm sm:text-base">{category.label}</span>
+              <span className="text-sm sm:text-base !whitespace-pre-line">{category.label}</span>
             </button>);
 
         })}
@@ -93,7 +133,7 @@ export function SearchBar() {
             <label className="text-xs font-semibold text-gray-700 block mb-1">
               City, destination, or hotel name
             </label>
-            <LocationAutocomplete />
+            <LocationAutocomplete onLocationChange={handleLocationChange} />
           </div>
 
           {/* Dates */}
@@ -105,21 +145,21 @@ export function SearchBar() {
               <Calendar className="w-5 h-5 text-gray-400" />
               <button
                 onClick={handleCalendarToggle}
-                className="flex-1 text-left text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none"
-              >
+                className="flex-1 text-left text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none">
+
                 {formatDateRange() || "Add dates"}
               </button>
-              {(checkIn || checkOut) && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    clearDates();
-                  }}
-                  className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-                >
+              {(checkIn || checkOut) &&
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  clearDates();
+                }}
+                className="p-1 hover:bg-gray-100 rounded-full transition-colors">
+
                   <X className="w-4 h-4 text-gray-600" />
                 </button>
-              )}
+              }
             </div>
           </div>
 
@@ -128,15 +168,18 @@ export function SearchBar() {
             <label className="text-xs font-semibold text-gray-700 block mb-1">
               Guests
             </label>
-            <GuestsInput 
+            <GuestsInput
               isOpen={isGuestsOpen}
               onOpenChange={handleGuestsToggle}
-            />
+              onGuestsChange={handleGuestsChange} />
+
           </div>
 
           {/* Search Button */}
           <div className="flex items-center justify-center px-2">
-            <Button className="bg-[#FFB400] hover:bg-[#e5a200] text-white rounded-xl w-full md:w-auto px-8 py-6 md:py-3 font-semibold transition-colors">
+            <Button
+              onClick={handleSearch}
+              className="bg-[#FFB400] hover:bg-[#e5a200] text-white rounded-xl w-full md:w-auto px-8 py-6 md:py-3 font-semibold transition-colors">
               <Search className="w-5 h-5 mr-0 md:mr-0" />
               <span className="md:hidden ml-2">Search</span>
             </Button>
@@ -147,9 +190,9 @@ export function SearchBar() {
         <DateRangePicker
           isOpen={isCalendarOpen}
           onClose={() => setIsCalendarOpen(false)}
-          onSelect={handleDateSelect}
-        />
+          onSelect={handleDateSelect} />
+
       </div>
-    </div>
-  );
+    </div>);
+
 }
