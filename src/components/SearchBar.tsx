@@ -119,7 +119,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
                 style={{ color: category.color }} />
 
               }
-              <span className="text-sm sm:text-base !whitespace-pre-line !whitespace-pre-line !whitespace-pre-line">{category.label}</span>
+              <span className="text-sm sm:text-base !whitespace-pre-line !whitespace-pre-line !whitespace-pre-line !whitespace-pre-line !w-[74.6%] !h-6">{category.label}</span>
             </button>);
 
         })}
