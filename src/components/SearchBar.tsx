@@ -8,6 +8,8 @@ import { DateRangePicker } from "./DateRangePicker";
 import { GuestsInput } from "./GuestsSelector";
 import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
+import { useTranslationContext } from "@/contexts/TranslationContext";
+import { Skeleton } from "./ui/skeleton";
 
 interface SearchFilters {
   location?: string;
@@ -26,6 +28,7 @@ interface SearchBarProps {
 
 export function SearchBar({ onSearch }: SearchBarProps) {
   const { t } = useTranslation();
+  const { isReady } = useTranslationContext();
   const [activeTab, setActiveTab] = useState("all");
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isGuestsOpen, setIsGuestsOpen] = useState(false);
@@ -100,8 +103,25 @@ export function SearchBar({ onSearch }: SearchBarProps) {
     setGuestsData(data);
   };
 
+  // Show skeleton loaders while translations load
+  if (!isReady) {
+    return (
+      <div className="max-w-5xl mx-auto">
+        {/* Category tabs skeleton */}
+        <div className="flex gap-2 mb-4 justify-start overflow-x-auto py-3 px-1">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <Skeleton key={i} className="h-10 w-32 rounded-full flex-shrink-0" />
+          ))}
+        </div>
+        
+        {/* Search form skeleton */}
+        <Skeleton className="h-20 w-full rounded-2xl" />
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-5xl mx-auto animate-fade-in">
       {/* Tabs */}
       <div className="flex gap-2 mb-4 justify-start overflow-x-auto scrollbar-hide py-3 px-1">
         {categories.map((category) => {

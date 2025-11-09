@@ -1,3 +1,6 @@
+/* Updated: 2025-11-09T15:44:12.481Z */
+/* Updated: 2025-11-08T21:48:32.684Z */
+/* Updated: 2025-11-08T21:34:01.156Z */
 /* Updated: 2025-11-07T18:26:01.497Z */
 /* Updated: 2025-11-07T18:25:41.642Z */
 /* Updated: 2025-11-07T14:09:22.017Z */
@@ -149,6 +152,30 @@
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+
+  /* Shimmer animation for skeleton loaders */
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  /* Fade in animation */
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-in-out;
   }
 }
 

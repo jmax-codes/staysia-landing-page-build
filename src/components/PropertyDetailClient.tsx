@@ -101,12 +101,12 @@ export function PropertyDetailClient({ data }: PropertyDetailClientProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA]">
+    <div className="min-h-screen bg-[#FAFAFA] animate-fade-in">
       {/* Main Content with proper spacing from navbar */}
       <div className="pt-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
-        {/* Back Button - Elegant and Minimal */}
+        {/* Back Button - Navigate to landing page */}
         <button
-          onClick={() => router.back()}
+          onClick={() => router.push("/")}
           className="group flex items-center gap-2 mb-6 text-gray-600 hover:text-gray-900 transition-all duration-200"
         >
           <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white border border-gray-200 group-hover:border-gray-900 group-hover:shadow-sm transition-all duration-200">

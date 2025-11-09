@@ -6,6 +6,8 @@ import Image from "next/image";
 import { Heart, Star } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { useTranslation } from "react-i18next";
+import { useTranslationContext } from "@/contexts/TranslationContext";
+import { PropertyCardSkeleton } from "./LoadingSkeletons";
 
 interface PropertyCardProps {
   id: number;
@@ -37,6 +39,7 @@ export function PropertyCard({
 }: PropertyCardProps) {
   const router = useRouter();
   const { t } = useTranslation();
+  const { isReady } = useTranslationContext();
   const [isFavorite, setIsFavorite] = useState(initialFavorite);
   const [isHovered, setIsHovered] = useState(false);
   const { selectedCurrency, exchangeRate } = useCurrency();
@@ -81,9 +84,14 @@ export function PropertyCard({
 
   const priceLabel = cardType === "car" ? t('propertyCard.perDay') : t('propertyCard.forNights', { count: nights });
 
+  // Show skeleton while translations are loading
+  if (!isReady) {
+    return <PropertyCardSkeleton />;
+  }
+
   return (
     <div
-      className="group relative flex-shrink-0 w-[280px] sm:w-[320px] cursor-pointer"
+      className="group relative flex-shrink-0 w-[280px] sm:w-[320px] cursor-pointer animate-fade-in"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleClick}

@@ -5,6 +5,8 @@ import { Header } from "@/components/Header";
 import { PropertyCarousel } from "@/components/PropertyCarousel";
 import { Footer } from "@/components/Footer";
 import { useTranslation } from "react-i18next";
+import { useTranslationContext } from "@/contexts/TranslationContext";
+import { PageLoadingSkeleton, PropertyCarouselSkeleton } from "@/components/LoadingSkeletons";
 
 interface Property {
   id: number;
@@ -32,6 +34,7 @@ interface SearchFilters {
 
 export default function Home() {
   const { t } = useTranslation();
+  const { isReady } = useTranslationContext();
   const [properties, setProperties] = useState<Property[]>([]);
   const [searchFilters, setSearchFilters] = useState<SearchFilters>({});
   const [isLoading, setIsLoading] = useState(true);
@@ -157,15 +160,22 @@ export default function Home() {
 
   const dynamicSections = createDynamicSections();
 
+  // Show skeleton while translations are loading
+  if (!isReady) {
+    return <PageLoadingSkeleton />;
+  }
+
   return (
-    <div className="min-h-screen bg-[#FAFAFA]">
+    <div className="min-h-screen bg-[#FAFAFA] animate-fade-in">
       <Header onSearch={handleSearch} />
       
       <main>
         {isLoading ? (
-          <div className="flex items-center justify-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#283B73]"></div>
-          </div>
+          <>
+            <PropertyCarouselSkeleton />
+            <PropertyCarouselSkeleton />
+            <PropertyCarouselSkeleton />
+          </>
         ) : (
           <>
             {/* 3 Dynamic Property Sections */}

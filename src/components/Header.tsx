@@ -2,6 +2,8 @@
 
 import { SearchBar } from "./SearchBar";
 import { useTranslation } from "react-i18next";
+import { useTranslationContext } from "@/contexts/TranslationContext";
+import { HeaderSkeleton } from "./LoadingSkeletons";
 
 interface SearchFilters {
   location?: string;
@@ -20,9 +22,14 @@ interface HeaderProps {
 
 export function Header({ onSearch }: HeaderProps) {
   const { t } = useTranslation();
+  const { isReady } = useTranslationContext();
+
+  if (!isReady) {
+    return <HeaderSkeleton />;
+  }
 
   return (
-    <header className="relative min-h-[600px] lg:min-h-[700px]">
+    <header className="relative min-h-[600px] lg:min-h-[700px] animate-fade-in">
       {/* Background Image with Overlay */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"

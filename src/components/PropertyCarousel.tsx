@@ -4,6 +4,8 @@ import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { PropertyCard } from "./PropertyCard";
 import { Button } from "./ui/button";
+import { useTranslationContext } from "@/contexts/TranslationContext";
+import { PropertyCarouselSkeleton } from "./LoadingSkeletons";
 
 interface Property {
   id: number;
@@ -26,6 +28,7 @@ interface PropertyCarouselProps {
 }
 
 export function PropertyCarousel({ title, properties, type = "property" }: PropertyCarouselProps) {
+  const { isReady } = useTranslationContext();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
@@ -42,8 +45,12 @@ export function PropertyCarousel({ title, properties, type = "property" }: Prope
     }
   };
 
+  if (!isReady) {
+    return <PropertyCarouselSkeleton />;
+  }
+
   return (
-    <section className="py-8 lg:py-12">
+    <section className="py-8 lg:py-12 animate-fade-in">
       <div className="px-4 sm:px-6 lg:px-12 max-w-[1400px] mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">

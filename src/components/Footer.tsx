@@ -3,10 +3,13 @@
 import Link from "next/link";
 import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useTranslationContext } from "@/contexts/TranslationContext";
 
 export function Footer() {
   const { t } = useTranslation();
+  const { isReady } = useTranslationContext();
 
+  // Show footer with English fallback while translations load
   return (
     <footer className="bg-[#283B73] text-white py-12 lg:py-16 mt-16">
       <div className="px-4 sm:px-6 lg:px-12 max-w-[1400px] mx-auto">
@@ -20,7 +23,7 @@ export function Footer() {
               <span className="text-3xl font-bold">Staysia</span>
             </Link>
             <p className="text-white/80 text-sm leading-relaxed mb-6">
-              {t('footer.description')}
+              {isReady ? t('footer.description') : 'Find your perfect stay across Indonesia. From modern apartments to luxury villas, discover exceptional accommodations for every journey.'}
             </p>
             <div className="flex gap-4">
               <a
@@ -56,26 +59,26 @@ export function Footer() {
 
           {/* Company Links */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">{t('footer.company')}</h3>
+            <h3 className="font-semibold text-lg mb-4">{isReady ? t('footer.company') : 'Company'}</h3>
             <ul className="space-y-3">
               <li>
                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm">
-                  {t('footer.aboutUs')}
+                  {isReady ? t('footer.aboutUs') : 'About Us'}
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm">
-                  {t('footer.careers')}
+                  {isReady ? t('footer.careers') : 'Careers'}
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm">
-                  {t('footer.pressMedia')}
+                  {isReady ? t('footer.pressMedia') : 'Press & Media'}
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm">
-                  {t('footer.blog')}
+                  {isReady ? t('footer.blog') : 'Blog'}
                 </Link>
               </li>
             </ul>
@@ -83,26 +86,26 @@ export function Footer() {
 
           {/* Support Links */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">{t('footer.support')}</h3>
+            <h3 className="font-semibold text-lg mb-4">{isReady ? t('footer.support') : 'Support'}</h3>
             <ul className="space-y-3">
               <li>
                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm">
-                  {t('footer.helpCenter')}
+                  {isReady ? t('footer.helpCenter') : 'Help Center'}
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm">
-                  {t('footer.safetyInformation')}
+                  {isReady ? t('footer.safetyInformation') : 'Safety Information'}
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm">
-                  {t('footer.cancellationOptions')}
+                  {isReady ? t('footer.cancellationOptions') : 'Cancellation Options'}
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm">
-                  {t('footer.contactSupport')}
+                  {isReady ? t('footer.contactSupport') : 'Contact Support'}
                 </Link>
               </li>
             </ul>
@@ -110,26 +113,26 @@ export function Footer() {
 
           {/* Hosting Links */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">{t('footer.hosting')}</h3>
+            <h3 className="font-semibold text-lg mb-4">{isReady ? t('footer.hosting') : 'Hosting'}</h3>
             <ul className="space-y-3">
               <li>
                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm">
-                  {t('footer.becomeAHost')}
+                  {isReady ? t('footer.becomeAHost') : 'Become a Host'}
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm">
-                  {t('footer.hostResources')}
+                  {isReady ? t('footer.hostResources') : 'Host Resources'}
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm">
-                  {t('footer.communityForum')}
+                  {isReady ? t('footer.communityForum') : 'Community Forum'}
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm">
-                  {t('footer.responsibleHosting')}
+                  {isReady ? t('footer.responsibleHosting') : 'Responsible Hosting'}
                 </Link>
               </li>
             </ul>
@@ -140,17 +143,17 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-white/10">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-white/60 text-sm">
-              {t('footer.allRightsReserved')}
+              {isReady ? t('footer.allRightsReserved') : '© 2025 Staysia. All rights reserved.'}
             </p>
             <div className="flex gap-6">
               <Link href="#" className="text-white/60 hover:text-white text-sm transition-colors">
-                {t('footer.privacyPolicy')}
+                {isReady ? t('footer.privacyPolicy') : 'Privacy Policy'}
               </Link>
               <Link href="#" className="text-white/60 hover:text-white text-sm transition-colors">
-                {t('footer.termsOfService')}
+                {isReady ? t('footer.termsOfService') : 'Terms of Service'}
               </Link>
               <Link href="#" className="text-white/60 hover:text-white text-sm transition-colors">
-                {t('footer.cookiePolicy')}
+                {isReady ? t('footer.cookiePolicy') : 'Cookie Policy'}
               </Link>
             </div>
           </div>

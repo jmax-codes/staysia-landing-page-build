@@ -10,16 +10,18 @@ import { useSession, authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
+import { useTranslationContext } from "@/contexts/TranslationContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger } from
-"@/components/ui/dropdown-menu";
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function Navbar() {
   const { t } = useTranslation();
+  const { isReady } = useTranslationContext();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const navRef = useRef<HTMLElement>(null);
@@ -100,8 +102,8 @@ export function Navbar() {
     <>
       <nav
         ref={navRef}
-        className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 lg:px-12 py-4 lg:py-6 transition-colors duration-300">
-
+        className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 lg:px-12 py-4 lg:py-6 transition-colors duration-300"
+      >
         <div className="max-w-[1400px] mx-auto flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
@@ -110,9 +112,9 @@ export function Navbar() {
             </div>
             <span
               className={`text-2xl lg:text-3xl font-bold transition-colors duration-300 ${
-              isScrolled ? "text-[#283B73]" : "text-white"}`
-              }>
-
+                isScrolled ? "text-[#283B73]" : "text-white"
+              }`}
+            >
               Staysia
             </span>
           </Link>
@@ -122,67 +124,67 @@ export function Navbar() {
             <Link
               href="#stays"
               className={`font-medium text-lg tracking-wide transition-colors duration-300 !w-[42px] !h-[27px] ${
-              isScrolled ?
-              "text-gray-700 hover:text-[#283B73]" :
-              "text-white/90 hover:text-white"}`
-              }
-              style={{ fontFamily: "'Saira Condensed', sans-serif" }}>
-
+                isScrolled
+                  ? "text-gray-700 hover:text-[#283B73]"
+                  : "text-white/90 hover:text-white"
+              }`}
+              style={{ fontFamily: "'Saira Condensed', sans-serif" }}
+            >
               STAYS
             </Link>
             <Link
               href="#wishlists"
               className={`font-medium text-lg tracking-wide transition-colors duration-300 ${
-              isScrolled ?
-              "text-gray-700 hover:text-[#283B73]" :
-              "text-white/90 hover:text-white"}`
-              }
-              style={{ fontFamily: "'Saira Condensed', sans-serif" }}>
-
+                isScrolled
+                  ? "text-gray-700 hover:text-[#283B73]"
+                  : "text-white/90 hover:text-white"
+              }`}
+              style={{ fontFamily: "'Saira Condensed', sans-serif" }}
+            >
               WISHLISTS
             </Link>
             <Link
               href="/bookings"
               onClick={handleBookingsClick}
               className={`font-medium text-lg tracking-wide transition-colors duration-300 ${
-              isScrolled ?
-              "text-gray-700 hover:text-[#283B73]" :
-              "text-white/90 hover:text-white"}`
-              }
-              style={{ fontFamily: "'Saira Condensed', sans-serif" }}>
-
+                isScrolled
+                  ? "text-gray-700 hover:text-[#283B73]"
+                  : "text-white/90 hover:text-white"
+              }`}
+              style={{ fontFamily: "'Saira Condensed', sans-serif" }}
+            >
               BOOKINGS
             </Link>
             <Link
               href="#contact"
               className={`font-medium text-lg tracking-wide transition-colors duration-300 ${
-              isScrolled ?
-              "text-gray-700 hover:text-[#283B73]" :
-              "text-white/90 hover:text-white"}`
-              }
-              style={{ fontFamily: "'Saira Condensed', sans-serif" }}>
-
+                isScrolled
+                  ? "text-gray-700 hover:text-[#283B73]"
+                  : "text-white/90 hover:text-white"
+              }`}
+              style={{ fontFamily: "'Saira Condensed', sans-serif" }}
+            >
               CONTACT US
             </Link>
             <Button
               onClick={handleBecomeHostClick}
               className={`font-semibold px-6 py-2 rounded-full transition-all duration-300 ${
-              isScrolled ?
-              "bg-[#283B73] text-white hover:bg-[#1e2d5a]" :
-              "bg-white text-[#283B73] hover:bg-white/90"}`
-              }>
-
-              {t('navbar.becomeHost')}
+                isScrolled
+                  ? "bg-[#283B73] text-white hover:bg-[#1e2d5a]"
+                  : "bg-white text-[#283B73] hover:bg-white/90"
+              }`}
+            >
+              {isReady ? t('navbar.becomeHost') : 'Become a host'}
             </Button>
             <button
               onClick={() => setIsSettingsOpen(true)}
               className={`transition-colors duration-300 p-2 rounded-full ${
-              isScrolled ?
-              "text-gray-700 hover:text-[#283B73] hover:bg-gray-100" :
-              "text-white hover:text-white/90 hover:bg-white/10"}`
-              }
-              aria-label="Language and currency settings">
-
+                isScrolled
+                  ? "text-gray-700 hover:text-[#283B73] hover:bg-gray-100"
+                  : "text-white hover:text-white/90 hover:bg-white/10"
+              }`}
+              aria-label="Language and currency settings"
+            >
               <Globe className="w-6 h-6" />
             </button>
             {/* Pill-shaped Menu Button - Desktop */}
@@ -190,12 +192,12 @@ export function Navbar() {
               <DropdownMenuTrigger asChild>
                 <button
                   className={`flex items-center gap-3 px-3 py-2 rounded-full transition-all duration-300 shadow-sm ${
-                  isScrolled ?
-                  "bg-white hover:bg-gray-50 text-gray-700 border border-gray-200" :
-                  "bg-white hover:bg-gray-50 text-gray-700 border border-gray-200"}`
-                  }
-                  aria-label="Menu">
-
+                    isScrolled
+                      ? "bg-white hover:bg-gray-50 text-gray-700 border border-gray-200"
+                      : "bg-white hover:bg-gray-50 text-gray-700 border border-gray-200"
+                  }`}
+                  aria-label="Menu"
+                >
                   <Menu className="w-5 h-5" />
                   <div className="w-8 h-8 bg-gray-500 rounded-full flex items-center justify-center">
                     <User className="w-5 h-5 text-white" />
@@ -203,55 +205,55 @@ export function Navbar() {
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                {!isPending && session?.user ?
-                <>
+                {!isPending && session?.user ? (
+                  <>
                     <div className="px-2 py-1.5 text-sm font-semibold text-gray-900">
                       {session.user.name}
                     </div>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="cursor-pointer">
-                      {t('navbar.profile')}
+                      {isReady ? t('navbar.profile') : 'Profile'}
                     </DropdownMenuItem>
                     <DropdownMenuItem className="cursor-pointer">
-                      {t('navbar.accountSettings')}
+                      {isReady ? t('navbar.accountSettings') : 'Account Settings'}
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                    onClick={handleBecomeHostClick}
-                    className="cursor-pointer">
-
-                      {t('navbar.becomeHost')}
+                      onClick={handleBecomeHostClick}
+                      className="cursor-pointer"
+                    >
+                      {isReady ? t('navbar.becomeHost') : 'Become a Host'}
                     </DropdownMenuItem>
                     <DropdownMenuItem className="cursor-pointer">
-                      {t('navbar.helpCenter')}
+                      {isReady ? t('navbar.helpCenter') : 'Help Center'}
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                    onClick={handleSignOut}
-                    className="cursor-pointer text-red-600 focus:text-red-600">
-
+                      onClick={handleSignOut}
+                      className="cursor-pointer text-red-600 focus:text-red-600"
+                    >
                       <LogOut className="w-4 h-4 mr-2" />
-                      {t('navbar.logout')}
-                    </DropdownMenuItem>
-                  </> :
-
-                <>
-                    <DropdownMenuItem
-                    onClick={() => router.push("/auth")}
-                    className="cursor-pointer font-semibold">
-
-                      {t('navbar.loginSignup')}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                    onClick={handleBecomeHostClick}
-                    className="cursor-pointer">
-
-                      {t('navbar.becomeHost')}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="cursor-pointer">
-                      {t('navbar.helpCenter')}
+                      {isReady ? t('navbar.logout') : 'Log out'}
                     </DropdownMenuItem>
                   </>
-                }
+                ) : (
+                  <>
+                    <DropdownMenuItem
+                      onClick={() => router.push("/auth")}
+                      className="cursor-pointer font-semibold"
+                    >
+                      {isReady ? t('navbar.loginSignup') : 'Log in or Sign up'}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={handleBecomeHostClick}
+                      className="cursor-pointer"
+                    >
+                      {isReady ? t('navbar.becomeHost') : 'Become a Host'}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer">
+                      {isReady ? t('navbar.helpCenter') : 'Help Center'}
+                    </DropdownMenuItem>
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -262,12 +264,12 @@ export function Navbar() {
             <button
               onClick={() => setIsSettingsOpen(true)}
               className={`hidden sm:block transition-colors duration-300 p-2 rounded-full ${
-              isScrolled ?
-              "text-gray-700 hover:text-[#283B73] hover:bg-gray-100" :
-              "text-white hover:text-white/90 hover:bg-white/10"}`
-              }
-              aria-label="Language and currency settings">
-
+                isScrolled
+                  ? "text-gray-700 hover:text-[#283B73] hover:bg-gray-100"
+                  : "text-white hover:text-white/90 hover:bg-white/10"
+              }`}
+              aria-label="Language and currency settings"
+            >
               <Globe className="w-6 h-6" />
             </button>
             
@@ -282,55 +284,55 @@ export function Navbar() {
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                {!isPending && session?.user ?
-                <>
+                {!isPending && session?.user ? (
+                  <>
                     <div className="px-2 py-1.5 text-sm font-semibold text-gray-900">
                       {session.user.name}
                     </div>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="cursor-pointer">
-                      {t('navbar.profile')}
+                      {isReady ? t('navbar.profile') : 'Profile'}
                     </DropdownMenuItem>
                     <DropdownMenuItem className="cursor-pointer">
-                      {t('navbar.accountSettings')}
+                      {isReady ? t('navbar.accountSettings') : 'Account Settings'}
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                    onClick={handleBecomeHostClick}
-                    className="cursor-pointer">
-
-                      {t('navbar.becomeHost')}
+                      onClick={handleBecomeHostClick}
+                      className="cursor-pointer"
+                    >
+                      {isReady ? t('navbar.becomeHost') : 'Become a Host'}
                     </DropdownMenuItem>
                     <DropdownMenuItem className="cursor-pointer">
-                      {t('navbar.helpCenter')}
+                      {isReady ? t('navbar.helpCenter') : 'Help Center'}
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                    onClick={handleSignOut}
-                    className="cursor-pointer text-red-600 focus:text-red-600">
-
+                      onClick={handleSignOut}
+                      className="cursor-pointer text-red-600 focus:text-red-600"
+                    >
                       <LogOut className="w-4 h-4 mr-2" />
-                      {t('navbar.logout')}
-                    </DropdownMenuItem>
-                  </> :
-
-                <>
-                    <DropdownMenuItem
-                    onClick={() => router.push("/auth")}
-                    className="cursor-pointer font-semibold">
-
-                      {t('navbar.loginSignup')}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                    onClick={handleBecomeHostClick}
-                    className="cursor-pointer">
-
-                      {t('navbar.becomeHost')}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="cursor-pointer">
-                      {t('navbar.helpCenter')}
+                      {isReady ? t('navbar.logout') : 'Log out'}
                     </DropdownMenuItem>
                   </>
-                }
+                ) : (
+                  <>
+                    <DropdownMenuItem
+                      onClick={() => router.push("/auth")}
+                      className="cursor-pointer font-semibold"
+                    >
+                      {isReady ? t('navbar.loginSignup') : 'Log in or Sign up'}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={handleBecomeHostClick}
+                      className="cursor-pointer"
+                    >
+                      {isReady ? t('navbar.becomeHost') : 'Become a Host'}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer">
+                      {isReady ? t('navbar.helpCenter') : 'Help Center'}
+                    </DropdownMenuItem>
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -339,6 +341,6 @@ export function Navbar() {
 
       {/* Global Settings Modal */}
       <GlobalSettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
-    </>);
-
+    </>
+  );
 }

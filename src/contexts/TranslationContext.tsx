@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useGlobalStore } from "@/store/useGlobalStore";
 import "@/lib/i18n/config";
@@ -9,6 +9,7 @@ interface TranslationContextType {
   t: (key: string, options?: any) => string;
   language: string;
   changeLanguage: (lng: string) => void;
+  isReady: boolean;
 }
 
 const TranslationContext = createContext<TranslationContextType | undefined>(undefined);
@@ -16,19 +17,29 @@ const TranslationContext = createContext<TranslationContextType | undefined>(und
 export function TranslationProvider({ children }: { children: React.ReactNode }) {
   const { t, i18n } = useTranslation();
   const { language } = useGlobalStore();
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    if (language.code && i18n.language !== language.code) {
-      i18n.changeLanguage(language.code);
-    }
+    // Preload translations and mark as ready
+    const preloadTranslations = async () => {
+      if (language.code && i18n.language !== language.code) {
+        await i18n.changeLanguage(language.code);
+      }
+      // Small delay to ensure all translations are loaded
+      setTimeout(() => setIsReady(true), 100);
+    };
+
+    preloadTranslations();
   }, [language.code, i18n]);
 
-  const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
+  const changeLanguage = async (lng: string) => {
+    setIsReady(false);
+    await i18n.changeLanguage(lng);
+    setTimeout(() => setIsReady(true), 100);
   };
 
   return (
-    <TranslationContext.Provider value={{ t, language: i18n.language, changeLanguage }}>
+    <TranslationContext.Provider value={{ t, language: i18n.language, changeLanguage, isReady }}>
       {children}
     </TranslationContext.Provider>
   );
