@@ -99,7 +99,7 @@ export function PropertyDetailClient({ data }: PropertyDetailClientProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] pt-20">
+    <div className="min-h-screen bg-[#FAFAFA]">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -113,7 +113,8 @@ export function PropertyDetailClient({ data }: PropertyDetailClientProps) {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Main Content with proper spacing from navbar */}
+      <div className="pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Title Section */}
         <div className="mb-6">
           <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
@@ -258,48 +259,53 @@ export function PropertyDetailClient({ data }: PropertyDetailClientProps) {
             )}
 
             {/* Reviews */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                <Star className="w-6 h-6 inline fill-gray-900 text-gray-900 mr-2" />
-                {property.rating.toFixed(2)} • {reviews.length} reviews
-              </h2>
-              <div className="space-y-6">
-                {reviews.slice(0, 5).map((review) => (
-                  <div key={review.id} className="border-b border-gray-200 pb-6 last:border-0">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                        {review.userAvatar ? (
-                          <Image
-                            src={review.userAvatar}
-                            alt={review.userName}
-                            width={48}
-                            height={48}
-                            className="rounded-full"
-                          />
-                        ) : (
-                          <span className="text-lg font-semibold text-gray-600">
-                            {review.userName.charAt(0)}
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="font-semibold text-gray-900">{review.userName}</h4>
-                          <div className="flex items-center gap-1">
-                            <Star className="w-4 h-4 fill-gray-900 text-gray-900" />
-                            <span className="text-sm font-semibold">{review.rating.toFixed(1)}</span>
-                          </div>
+            {reviews.length > 0 && (
+              <div className="bg-white rounded-2xl p-6 shadow-sm">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                  <Star className="w-6 h-6 inline fill-gray-900 text-gray-900 mr-2" />
+                  {property.rating.toFixed(2)} • {reviews.length} reviews
+                </h2>
+                <div className="space-y-6">
+                  {reviews.map((review) => (
+                    <div key={review.id} className="border-b border-gray-200 pb-6 last:border-0">
+                      <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                          {review.userAvatar ? (
+                            <Image
+                              src={review.userAvatar}
+                              alt={review.userName}
+                              width={48}
+                              height={48}
+                              className="rounded-full"
+                            />
+                          ) : (
+                            <span className="text-lg font-semibold text-gray-600">
+                              {review.userName.charAt(0)}
+                            </span>
+                          )}
                         </div>
-                        <p className="text-sm text-gray-600 mb-2">
-                          {new Date(review.createdAt).toLocaleDateString()}
-                        </p>
-                        <p className="text-gray-700 leading-relaxed">{review.comment}</p>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-2">
+                            <h4 className="font-semibold text-gray-900">{review.userName}</h4>
+                            <div className="flex items-center gap-1">
+                              <Star className="w-4 h-4 fill-gray-900 text-gray-900" />
+                              <span className="text-sm font-semibold">{review.rating.toFixed(1)}</span>
+                            </div>
+                          </div>
+                          <p className="text-sm text-gray-600 mb-2">
+                            {new Date(review.createdAt).toLocaleDateString("en-US", {
+                              month: "long",
+                              year: "numeric"
+                            })}
+                          </p>
+                          <p className="text-gray-700 leading-relaxed">{review.comment}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Sidebar - Pricing Calendar */}
