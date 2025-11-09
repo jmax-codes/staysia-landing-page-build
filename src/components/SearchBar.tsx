@@ -39,7 +39,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
   { id: "apartment", label: "Apartment", icon: Building2, color: "#95E1D3" },
   { id: "hotels", label: "Hotel", icon: Hotel, color: "#F38181" },
   { id: "condos", label: "Condo", icon: Building, color: "#AA96DA" },
-  { id: "penthouses", label: "Penthouses", icon: Building2, color: "#FCBAD3" }];
+  { id: "penthouses", label: "Penthouse", icon: Building2, color: "#FCBAD3" }];
 
   const handleDateSelect = (checkInDate: Date | null, checkOutDate: Date | null) => {
     setCheckIn(checkInDate);
@@ -119,7 +119,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
                 style={{ color: category.color }} />
 
               }
-              <span className="text-sm sm:text-base !whitespace-pre-line !whitespace-pre-line !whitespace-pre-line !whitespace-pre-line !w-[74.6%] !h-6">{category.label}</span>
+              <span className="text-sm sm:text-base !whitespace-pre-line !whitespace-pre-line !whitespace-pre-line !whitespace-pre-line !w-[74.6%] !h-6 !whitespace-pre-line">{category.label}</span>
             </button>);
 
         })}
