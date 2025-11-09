@@ -7,6 +7,7 @@
     "locationPlaceholder": "¿Adónde vas?",
     "checkIn": "Entrada",
     "checkOut": "Salida",
+    "when": "Cuándo",
     "guests": "Huéspedes",
     "guestsPlaceholder": "Añadir huéspedes",
     "adults": "Adultos",
@@ -21,8 +22,23 @@
       "house": "Casa",
       "condo": "Condominio",
       "penthouse": "Ático",
-      "townhouse": "Casa adosada"
+      "townhouse": "Casa adosada",
+      "hotel": "Hotel"
     }
+  },
+  "navbar": {
+    "becomeHost": "Conviértete en anfitrión",
+    "language": "Idioma",
+    "currency": "Moneda",
+    "chooseLanguage": "Elige un idioma",
+    "chooseCurrency": "Elige una moneda",
+    "translation": "Traducción",
+    "translationDescription": "Traducir automáticamente descripciones y reseñas al inglés.",
+    "loginSignup": "Iniciar sesión o Registrarse",
+    "profile": "Perfil",
+    "accountSettings": "Configuración de Cuenta",
+    "helpCenter": "Centro de Ayuda",
+    "logout": "Cerrar sesión"
   },
   "propertyCard": {
     "guestFavorite": "Favorito de huéspedes",
@@ -83,6 +99,11 @@
     "peakSeason": "Temporada Alta",
     "soldOut": "Agotado",
     "selectDates": "Selecciona tus fechas",
-    "checkAvailability": "Consulta disponibilidad y precios para tu estancia"
+    "checkAvailability": "Consulta disponibilidad y precios para tu estancia",
+    "clearDates": "Limpiar Fechas",
+    "confirmSelection": "Confirmar Selección",
+    "totalPrice": "Precio Total",
+    "nights": "{{count}} noche",
+    "nights_plural": "{{count}} noches"
   }
 }
