@@ -102,24 +102,22 @@ export function PropertyDetailClient({ data }: PropertyDetailClientProps) {
 
   return (
     <div className="min-h-screen bg-[#FAFAFA]">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 fixed top-20 left-0 right-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-2 text-gray-700 hover:text-gray-900 transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            <span className="font-medium">{t('propertyDetail.back')}</span>
-          </button>
-        </div>
-      </div>
-
       {/* Main Content with proper spacing from navbar */}
-      <div className="pt-50 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="pt-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+        {/* Back Button - Elegant and Minimal */}
+        <button
+          onClick={() => router.back()}
+          className="group flex items-center gap-2 mb-6 text-gray-600 hover:text-gray-900 transition-all duration-200"
+        >
+          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white border border-gray-200 group-hover:border-gray-900 group-hover:shadow-sm transition-all duration-200">
+            <ArrowLeft className="w-4 h-4" />
+          </div>
+          <span className="text-sm font-medium">{t('propertyDetail.back')}</span>
+        </button>
+
         {/* Title Section */}
         <div className="mb-6">
-          <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-3">
             {property.name}
           </h1>
           <div className="flex flex-wrap items-center gap-4 text-sm">
@@ -312,7 +310,7 @@ export function PropertyDetailClient({ data }: PropertyDetailClientProps) {
 
           {/* Sidebar - Pricing Calendar */}
           <div className="lg:col-span-1">
-            <div className="sticky top-24">
+            <div className="sticky top-32">
               <PricingCalendar
                 propertyId={property.id}
                 pricingData={pricing}
