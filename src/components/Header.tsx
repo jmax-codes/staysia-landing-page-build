@@ -1,8 +1,26 @@
 "use client";
 
 import { SearchBar } from "./SearchBar";
+import { useTranslation } from "react-i18next";
 
-export function Header() {
+interface SearchFilters {
+  location?: string;
+  category?: string;
+  checkIn?: Date | null;
+  checkOut?: Date | null;
+  adults?: number;
+  children?: number;
+  pets?: number;
+  rooms?: number;
+}
+
+interface HeaderProps {
+  onSearch?: (filters: SearchFilters) => void;
+}
+
+export function Header({ onSearch }: HeaderProps) {
+  const { t } = useTranslation();
+
   return (
     <header className="relative min-h-[600px] lg:min-h-[700px]">
       {/* Background Image with Overlay */}
@@ -25,10 +43,10 @@ export function Header() {
               fontFamily: "'Playfair Display', serif"
             }}
           >
-            Find your perfect stay
+            {t('header.title')}
           </h1>
           
-          <SearchBar />
+          <SearchBar onSearch={onSearch} />
         </div>
       </div>
     </header>

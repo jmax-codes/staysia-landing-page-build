@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Header } from "@/components/Header";
 import { PropertyCarousel } from "@/components/PropertyCarousel";
 import { Footer } from "@/components/Footer";
+import { useTranslation } from "react-i18next";
 
 interface Property {
   id: number;
@@ -30,6 +31,7 @@ interface SearchFilters {
 }
 
 export default function Home() {
+  const { t } = useTranslation();
   const [properties, setProperties] = useState<Property[]>([]);
   const [searchFilters, setSearchFilters] = useState<SearchFilters>({});
   const [isLoading, setIsLoading] = useState(true);
@@ -95,7 +97,7 @@ export default function Home() {
     if (sortedCities.length > 0) {
       const [topCity, topCityProperties] = sortedCities[0];
       sections.push({
-        title: `Stays in ${topCity}`,
+        title: t('sections.staysIn', { city: topCity }),
         properties: topCityProperties.slice(0, 12),
       });
     }
@@ -104,7 +106,7 @@ export default function Home() {
     if (sortedCities.length > 1) {
       const [secondCity, secondCityProperties] = sortedCities[1];
       sections.push({
-        title: `Available homes in ${secondCity}`,
+        title: t('sections.availableHomesIn', { city: secondCity }),
         properties: secondCityProperties.slice(0, 12),
       });
     } else {
@@ -133,7 +135,7 @@ export default function Home() {
     if (sortedCities.length > 2) {
       const [thirdCity, thirdCityProperties] = sortedCities[2];
       sections.push({
-        title: `Places to stay in ${thirdCity}`,
+        title: t('sections.placesToStayIn', { city: thirdCity }),
         properties: thirdCityProperties.slice(0, 12),
       });
     } else {
@@ -144,7 +146,7 @@ export default function Home() {
       
       if (favorites.length > 0) {
         sections.push({
-          title: `Guest favorites`,
+          title: t('sections.guestFavorites'),
           properties: favorites,
         });
       }
@@ -180,10 +182,10 @@ export default function Home() {
             {properties.length === 0 && !isLoading && (
               <div className="text-center py-20">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                  No results found
+                  {t('sections.noResultsFound')}
                 </h2>
                 <p className="text-gray-600">
-                  Try adjusting your search filters
+                  {t('sections.tryAdjustingFilters')}
                 </p>
               </div>
             )}

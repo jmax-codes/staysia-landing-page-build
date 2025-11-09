@@ -1,6 +1,7 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useEffect } from "react";
+import { useGlobalStore } from "@/store/useGlobalStore";
 
 interface CurrencyContextType {
   selectedCurrency: string;
@@ -11,37 +12,31 @@ interface CurrencyContextType {
 const CurrencyContext = createContext<CurrencyContextType | undefined>(undefined);
 
 export function CurrencyProvider({ children }: { children: React.ReactNode }) {
-  const [selectedCurrency, setSelectedCurrency] = useState("USD");
-  const [exchangeRate, setExchangeRate] = useState(1);
+  const { currency, setCurrency } = useGlobalStore();
 
   useEffect(() => {
     async function fetchExchangeRate() {
-      try {
-        const response = await fetch(
-          `https://api.exchangerate.host/convert?from=IDR&to=${selectedCurrency}`
-        );
-        const data = await response.json();
-        
-        if (data.success && data.result) {
-          setExchangeRate(data.result);
-        }
-      } catch (error) {
-        console.error("Failed to fetch exchange rate:", error);
-        // Fallback rates
-        const fallbackRates: Record<string, number> = {
-          USD: 0.000063,
-          EUR: 0.000058,
-          GBP: 0.000050,
-        };
-        setExchangeRate(fallbackRates[selectedCurrency] || 1);
-      }
+      // Use the rate from the currency object in global store
+      // The currencies data already has exchange rates
     }
-
     fetchExchangeRate();
-  }, [selectedCurrency]);
+  }, [currency.code]);
+
+  const setSelectedCurrency = (currencyCode: string) => {
+    // Find the currency in the currencies data and update global store
+    const currencies = require("@/data/currencies").currencies;
+    const newCurrency = currencies.find((c: any) => c.code === currencyCode);
+    if (newCurrency) {
+      setCurrency(newCurrency);
+    }
+  };
 
   return (
-    <CurrencyContext.Provider value={{ selectedCurrency, exchangeRate, setSelectedCurrency }}>
+    <CurrencyContext.Provider value={{ 
+      selectedCurrency: currency.code, 
+      exchangeRate: currency.rate, 
+      setSelectedCurrency 
+    }}>
       {children}
     </CurrencyContext.Provider>
   );

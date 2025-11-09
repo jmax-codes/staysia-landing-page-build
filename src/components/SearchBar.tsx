@@ -7,6 +7,7 @@ import { LocationAutocomplete } from "./LocationAutocomplete";
 import { DateRangePicker } from "./DateRangePicker";
 import { GuestsInput } from "./GuestsSelector";
 import { format } from "date-fns";
+import { useTranslation } from "react-i18next";
 
 interface SearchFilters {
   location?: string;
@@ -24,6 +25,7 @@ interface SearchBarProps {
 }
 
 export function SearchBar({ onSearch }: SearchBarProps) {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("all");
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isGuestsOpen, setIsGuestsOpen] = useState(false);
@@ -33,13 +35,14 @@ export function SearchBar({ onSearch }: SearchBarProps) {
   const [guestsData, setGuestsData] = useState({ adults: 0, children: 0, infants: 0, pets: 0 });
 
   const categories = [
-  { id: "all", label: "All", icon: null, color: null },
-  { id: "houses", label: "House", icon: Home, color: "#FF6B6B" },
-  { id: "villas", label: "Villa", icon: Castle, color: "#4ECDC4" },
-  { id: "apartment", label: "Apartment", icon: Building2, color: "#95E1D3" },
-  { id: "hotels", label: "Hotel", icon: Hotel, color: "#F38181" },
-  { id: "condos", label: "Condo", icon: Building, color: "#AA96DA" },
-  { id: "penthouses", label: "Penthouse", icon: Building2, color: "#FCBAD3" }];
+    { id: "all", label: t('search.categories.all'), icon: null, color: null },
+    { id: "houses", label: t('search.categories.house'), icon: Home, color: "#FF6B6B" },
+    { id: "villas", label: t('search.categories.villa'), icon: Castle, color: "#4ECDC4" },
+    { id: "apartment", label: t('search.categories.apartment'), icon: Building2, color: "#95E1D3" },
+    { id: "hotels", label: t('search.categories.hotel'), icon: Hotel, color: "#F38181" },
+    { id: "condos", label: t('search.categories.condo'), icon: Building, color: "#AA96DA" },
+    { id: "penthouses", label: t('search.categories.penthouse'), icon: Building2, color: "#FCBAD3" }
+  ];
 
   const handleDateSelect = (checkInDate: Date | null, checkOutDate: Date | null) => {
     setCheckIn(checkInDate);
@@ -108,20 +111,15 @@ export function SearchBar({ onSearch }: SearchBarProps) {
               key={category.id}
               onClick={() => setActiveTab(category.id)}
               className={`flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-full font-medium transition-all whitespace-nowrap flex-shrink-0 ${
-              activeTab === category.id ?
-              "bg-white text-[#283B73] shadow-lg scale-105" :
-              "text-white hover:bg-white/10 hover:scale-105"}`
-              }>
-
-              {Icon &&
-              <Icon
-                className="w-4 h-4"
-                style={{ color: category.color }} />
-
-              }
-              <span className="text-sm sm:text-base !whitespace-pre-line !whitespace-pre-line !whitespace-pre-line !whitespace-pre-line !w-[74.6%] !h-6 !whitespace-pre-line">{category.label}</span>
-            </button>);
-
+                activeTab === category.id
+                  ? "bg-white text-[#283B73] shadow-lg scale-105"
+                  : "text-white hover:bg-white/10 hover:scale-105"
+              }`}
+            >
+              {Icon && <Icon className="w-4 h-4" style={{ color: category.color }} />}
+              <span className="text-sm sm:text-base">{category.label}</span>
+            </button>
+          );
         })}
       </div>
 
@@ -131,7 +129,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
           {/* Location */}
           <div className="px-4 py-3">
             <label className="text-xs font-semibold text-gray-700 block mb-1">
-              City, destination, or hotel name
+              {t('search.location')}
             </label>
             <LocationAutocomplete onLocationChange={handleLocationChange} />
           </div>
@@ -139,49 +137,50 @@ export function SearchBar({ onSearch }: SearchBarProps) {
           {/* Dates */}
           <div className="px-4 py-3 relative">
             <label className="text-xs font-semibold text-gray-700 block mb-1">
-              Check-in & Check-out Dates
+              {t('search.checkIn')} & {t('search.checkOut')}
             </label>
             <div className="flex items-center gap-2">
               <Calendar className="w-5 h-5 text-gray-400" />
               <button
                 onClick={handleCalendarToggle}
-                className="flex-1 text-left text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none">
-
-                {formatDateRange() || "Add dates"}
+                className="flex-1 text-left text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none"
+              >
+                {formatDateRange() || t('search.locationPlaceholder')}
               </button>
-              {(checkIn || checkOut) &&
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  clearDates();
-                }}
-                className="p-1 hover:bg-gray-100 rounded-full transition-colors">
-
+              {(checkIn || checkOut) && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    clearDates();
+                  }}
+                  className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                >
                   <X className="w-4 h-4 text-gray-600" />
                 </button>
-              }
+              )}
             </div>
           </div>
 
           {/* Guests */}
           <div className="px-4 py-3">
             <label className="text-xs font-semibold text-gray-700 block mb-1">
-              Guests
+              {t('search.guests')}
             </label>
             <GuestsInput
               isOpen={isGuestsOpen}
               onOpenChange={handleGuestsToggle}
-              onGuestsChange={handleGuestsChange} />
-
+              onGuestsChange={handleGuestsChange}
+            />
           </div>
 
           {/* Search Button */}
           <div className="flex items-center justify-center px-2">
             <Button
               onClick={handleSearch}
-              className="bg-[#FFB400] hover:bg-[#e5a200] text-white rounded-xl w-full md:w-auto px-8 py-6 md:py-3 font-semibold transition-colors">
+              className="bg-[#FFB400] hover:bg-[#e5a200] text-white rounded-xl w-full md:w-auto px-8 py-6 md:py-3 font-semibold transition-colors"
+            >
               <Search className="w-5 h-5 mr-0 md:mr-0" />
-              <span className="md:hidden ml-2">Search</span>
+              <span className="md:hidden ml-2">{t('search.search')}</span>
             </Button>
           </div>
         </div>
@@ -190,9 +189,9 @@ export function SearchBar({ onSearch }: SearchBarProps) {
         <DateRangePicker
           isOpen={isCalendarOpen}
           onClose={() => setIsCalendarOpen(false)}
-          onSelect={handleDateSelect} />
-
+          onSelect={handleDateSelect}
+        />
       </div>
-    </div>);
-
+    </div>
+  );
 }

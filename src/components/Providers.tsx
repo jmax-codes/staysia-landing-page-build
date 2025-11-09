@@ -1,7 +1,12 @@
 "use client";
 
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
+import { TranslationProvider } from "@/contexts/TranslationContext";
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  return <CurrencyProvider>{children}</CurrencyProvider>;
+  return (
+    <TranslationProvider>
+      <CurrencyProvider>{children}</CurrencyProvider>
+    </TranslationProvider>
+  );
 }

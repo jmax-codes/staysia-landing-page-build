@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { PricingCalendar } from "@/components/PricingCalendar";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { useTranslation } from "react-i18next";
 
 interface PropertyData {
   property: {
@@ -75,6 +76,7 @@ interface PropertyDetailClientProps {
 
 export function PropertyDetailClient({ data }: PropertyDetailClientProps) {
   const router = useRouter();
+  const { t } = useTranslation();
   const { property, rooms, reviews, pricing } = data;
   const [selectedImage, setSelectedImage] = useState(0);
   const { selectedCurrency, exchangeRate } = useCurrency();
@@ -108,7 +110,7 @@ export function PropertyDetailClient({ data }: PropertyDetailClientProps) {
             className="flex items-center gap-2 text-gray-700 hover:text-gray-900 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
-            <span className="font-medium">Back</span>
+            <span className="font-medium">{t('propertyDetail.back')}</span>
           </button>
         </div>
       </div>
@@ -124,7 +126,7 @@ export function PropertyDetailClient({ data }: PropertyDetailClientProps) {
             <div className="flex items-center gap-1">
               <Star className="w-4 h-4 fill-gray-900 text-gray-900" />
               <span className="font-semibold">{property.rating.toFixed(2)}</span>
-              <span className="text-gray-600">({reviews.length} {reviews.length === 1 ? "review" : "reviews"})</span>
+              <span className="text-gray-600">({reviews.length} {reviews.length === 1 ? t('propertyDetail.review') : t('propertyDetail.reviews')})</span>
             </div>
             <div className="flex items-center gap-1 text-gray-600">
               <MapPin className="w-4 h-4" />
@@ -167,14 +169,14 @@ export function PropertyDetailClient({ data }: PropertyDetailClientProps) {
             {/* Property Info */}
             <div className="bg-white rounded-2xl p-6 shadow-sm">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                {property.type} in {property.area}
+                {property.type} {t('propertyDetail.in')} {property.area}
               </h2>
               <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-6">
-                <span>{property.maxGuests} guests</span>
+                <span>{property.maxGuests} {t('propertyDetail.guests')}</span>
                 <span>•</span>
-                <span>{property.bedrooms} bedrooms</span>
+                <span>{property.bedrooms} {t('propertyDetail.bedrooms')}</span>
                 <span>•</span>
-                <span>{property.bathrooms} bathrooms</span>
+                <span>{property.bathrooms} {t('propertyDetail.bathrooms')}</span>
               </div>
               <p className="text-gray-700 leading-relaxed">{property.description}</p>
             </div>
@@ -182,7 +184,7 @@ export function PropertyDetailClient({ data }: PropertyDetailClientProps) {
             {/* Amenities */}
             <div className="bg-white rounded-2xl p-6 shadow-sm">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                What this place offers
+                {t('propertyDetail.whatThisPlaceOffers')}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {property.amenities.map((amenity, idx) => (
@@ -198,7 +200,7 @@ export function PropertyDetailClient({ data }: PropertyDetailClientProps) {
             {rooms.length > 0 && (
               <div className="bg-white rounded-2xl p-6 shadow-sm">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                  Available Rooms
+                  {t('propertyDetail.availableRooms')}
                 </h2>
                 <div className="space-y-4">
                   {rooms.map((room) => (
@@ -217,11 +219,11 @@ export function PropertyDetailClient({ data }: PropertyDetailClientProps) {
                           <p className="text-2xl font-bold text-gray-900">
                             {formatPrice(room.pricePerNight)}
                           </p>
-                          <p className="text-sm text-gray-600">per night</p>
+                          <p className="text-sm text-gray-600">{t('propertyDetail.perNight')}</p>
                         </div>
                       </div>
                       <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-3">
-                        <span>{room.maxGuests} guests</span>
+                        <span>{room.maxGuests} {t('propertyDetail.guests')}</span>
                         <span>•</span>
                         <span>{room.size} m²</span>
                         <span>•</span>
@@ -233,14 +235,14 @@ export function PropertyDetailClient({ data }: PropertyDetailClientProps) {
                             <>
                               <Check className="w-4 h-4 text-green-600" />
                               <span className="text-sm text-green-600 font-medium">
-                                Available
+                                {t('propertyDetail.available')}
                               </span>
                             </>
                           ) : (
                             <>
                               <X className="w-4 h-4 text-red-600" />
                               <span className="text-sm text-red-600 font-medium">
-                                Not Available
+                                {t('propertyDetail.notAvailable')}
                               </span>
                             </>
                           )}
@@ -249,7 +251,7 @@ export function PropertyDetailClient({ data }: PropertyDetailClientProps) {
                           disabled={!room.available}
                           className="bg-[#FFB400] hover:bg-[#e5a200] text-white disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                          Book Now
+                          {t('propertyDetail.bookNow')}
                         </Button>
                       </div>
                     </div>
@@ -263,7 +265,7 @@ export function PropertyDetailClient({ data }: PropertyDetailClientProps) {
               <div className="bg-white rounded-2xl p-6 shadow-sm">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">
                   <Star className="w-6 h-6 inline fill-gray-900 text-gray-900 mr-2" />
-                  {property.rating.toFixed(2)} • {reviews.length} reviews
+                  {property.rating.toFixed(2)} • {reviews.length} {reviews.length === 1 ? t('propertyDetail.review') : t('propertyDetail.reviews')}
                 </h2>
                 <div className="space-y-6">
                   {reviews.map((review) => (

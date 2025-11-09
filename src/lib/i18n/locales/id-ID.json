@@ -1,0 +1,88 @@
+{
+  "header": {
+    "title": "Temukan tempat menginap sempurna Anda"
+  },
+  "search": {
+    "location": "Lokasi",
+    "locationPlaceholder": "Mau kemana?",
+    "checkIn": "Check in",
+    "checkOut": "Check out",
+    "guests": "Tamu",
+    "guestsPlaceholder": "Tambah tamu",
+    "adults": "Dewasa",
+    "children": "Anak-anak",
+    "pets": "Hewan peliharaan",
+    "rooms": "Kamar",
+    "search": "Cari",
+    "categories": {
+      "all": "Semua",
+      "villa": "Villa",
+      "apartment": "Apartemen",
+      "house": "Rumah",
+      "condo": "Kondominium",
+      "penthouse": "Penthouse",
+      "townhouse": "Townhouse"
+    }
+  },
+  "propertyCard": {
+    "guestFavorite": "Favorit tamu",
+    "perNight": "per malam",
+    "forNights": "untuk {{count}} malam",
+    "perDay": "per hari",
+    "review": "ulasan",
+    "reviews": "ulasan"
+  },
+  "propertyDetail": {
+    "back": "Kembali",
+    "review": "ulasan",
+    "reviews": "ulasan",
+    "guests": "tamu",
+    "bedrooms": "kamar tidur",
+    "bathrooms": "kamar mandi",
+    "whatThisPlaceOffers": "Apa yang ditawarkan tempat ini",
+    "availableRooms": "Kamar Tersedia",
+    "perNight": "per malam",
+    "available": "Tersedia",
+    "notAvailable": "Tidak Tersedia",
+    "bookNow": "Pesan Sekarang",
+    "in": "di"
+  },
+  "sections": {
+    "staysIn": "Tempat menginap di {{city}}",
+    "availableHomesIn": "Rumah tersedia di {{city}}",
+    "placesToStayIn": "Tempat menginap di {{city}}",
+    "guestFavorites": "Favorit tamu",
+    "noResultsFound": "Tidak ada hasil ditemukan",
+    "tryAdjustingFilters": "Coba sesuaikan filter pencarian Anda"
+  },
+  "footer": {
+    "description": "Temukan tempat menginap sempurna Anda di seluruh Indonesia. Dari apartemen modern hingga vila mewah, temukan akomodasi luar biasa untuk setiap perjalanan.",
+    "company": "Perusahaan",
+    "aboutUs": "Tentang Kami",
+    "careers": "Karir",
+    "pressMedia": "Pers & Media",
+    "blog": "Blog",
+    "support": "Dukungan",
+    "helpCenter": "Pusat Bantuan",
+    "safetyInformation": "Informasi Keamanan",
+    "cancellationOptions": "Opsi Pembatalan",
+    "contactSupport": "Hubungi Dukungan",
+    "hosting": "Hosting",
+    "becomeAHost": "Menjadi Host",
+    "hostResources": "Sumber Daya Host",
+    "communityForum": "Forum Komunitas",
+    "responsibleHosting": "Hosting Bertanggung Jawab",
+    "allRightsReserved": "© 2025 Staysia. Hak cipta dilindungi.",
+    "privacyPolicy": "Kebijakan Privasi",
+    "termsOfService": "Ketentuan Layanan",
+    "cookiePolicy": "Kebijakan Cookie"
+  },
+  "calendar": {
+    "available": "Tersedia",
+    "bestDeal": "Penawaran Terbaik",
+    "peakSeason": "Musim Ramai",
+    "soldOut": "Terjual Habis",
+    "selectDates": "Pilih tanggal Anda",
+    "checkAvailability": "Periksa ketersediaan dan harga untuk menginap Anda"
+  }
+}

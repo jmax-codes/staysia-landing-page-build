@@ -1,0 +1,88 @@
+{
+  "header": {
+    "title": "Find your perfect stay"
+  },
+  "search": {
+    "location": "Location",
+    "locationPlaceholder": "Where are you going?",
+    "checkIn": "Check in",
+    "checkOut": "Check out",
+    "guests": "Guests",
+    "guestsPlaceholder": "Add guests",
+    "adults": "Adults",
+    "children": "Children",
+    "pets": "Pets",
+    "rooms": "Rooms",
+    "search": "Search",
+    "categories": {
+      "all": "All",
+      "villa": "Villa",
+      "apartment": "Apartment",
+      "house": "House",
+      "condo": "Condo",
+      "penthouse": "Penthouse",
+      "townhouse": "Townhouse"
+    }
+  },
+  "propertyCard": {
+    "guestFavorite": "Guest favorite",
+    "perNight": "per night",
+    "forNights": "for {{count}} nights",
+    "perDay": "per day",
+    "review": "review",
+    "reviews": "reviews"
+  },
+  "propertyDetail": {
+    "back": "Back",
+    "review": "review",
+    "reviews": "reviews",
+    "guests": "guests",
+    "bedrooms": "bedrooms",
+    "bathrooms": "bathrooms",
+    "whatThisPlaceOffers": "What this place offers",
+    "availableRooms": "Available Rooms",
+    "perNight": "per night",
+    "available": "Available",
+    "notAvailable": "Not Available",
+    "bookNow": "Book Now",
+    "in": "in"
+  },
+  "sections": {
+    "staysIn": "Stays in {{city}}",
+    "availableHomesIn": "Available homes in {{city}}",
+    "placesToStayIn": "Places to stay in {{city}}",
+    "guestFavorites": "Guest favorites",
+    "noResultsFound": "No results found",
+    "tryAdjustingFilters": "Try adjusting your search filters"
+  },
+  "footer": {
+    "description": "Find your perfect stay across Indonesia. From modern apartments to luxury villas, discover exceptional accommodations for every journey.",
+    "company": "Company",
+    "aboutUs": "About Us",
+    "careers": "Careers",
+    "pressMedia": "Press & Media",
+    "blog": "Blog",
+    "support": "Support",
+    "helpCenter": "Help Center",
+    "safetyInformation": "Safety Information",
+    "cancellationOptions": "Cancellation Options",
+    "contactSupport": "Contact Support",
+    "hosting": "Hosting",
+    "becomeAHost": "Become a Host",
+    "hostResources": "Host Resources",
+    "communityForum": "Community Forum",
+    "responsibleHosting": "Responsible Hosting",
+    "allRightsReserved": "© 2025 Staysia. All rights reserved.",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "cookiePolicy": "Cookie Policy"
+  },
+  "calendar": {
+    "available": "Available",
+    "bestDeal": "Best Deal",
+    "peakSeason": "Peak Season",
+    "soldOut": "Sold Out",
+    "selectDates": "Select your dates",
+    "checkAvailability": "Check availability and pricing for your stay"
+  }
+}

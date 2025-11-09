@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { useTranslation } from "react-i18next";
 
 interface PricingData {
   id: number;
@@ -26,6 +27,7 @@ const STATUS_COLORS = {
 };
 
 export function PricingCalendar({ propertyId, pricingData, basePrice }: PricingCalendarProps) {
+  const { t } = useTranslation();
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedCheckIn, setSelectedCheckIn] = useState<string | null>(null);
   const [selectedCheckOut, setSelectedCheckOut] = useState<string | null>(null);
@@ -140,7 +142,7 @@ export function PricingCalendar({ propertyId, pricingData, basePrice }: PricingC
           <div className="border border-gray-300 rounded-lg p-3">
             <div className="flex items-center gap-2 mb-1">
               <CalendarIcon className="w-4 h-4 text-gray-500" />
-              <span className="text-xs font-semibold text-gray-700">CHECK-IN</span>
+              <span className="text-xs font-semibold text-gray-700">{t('search.checkIn').toUpperCase()}</span>
             </div>
             <p className="text-sm font-medium text-gray-900">
               {selectedCheckIn
@@ -148,7 +150,7 @@ export function PricingCalendar({ propertyId, pricingData, basePrice }: PricingC
                     month: "short",
                     day: "numeric",
                   })
-                : "Select date"}
+                : t('calendar.selectDates')}
             </p>
             {selectedCheckIn && (
               <p className="text-xs text-gray-500">After 2:00 PM</p>
@@ -157,7 +159,7 @@ export function PricingCalendar({ propertyId, pricingData, basePrice }: PricingC
           <div className="border border-gray-300 rounded-lg p-3">
             <div className="flex items-center gap-2 mb-1">
               <CalendarIcon className="w-4 h-4 text-gray-500" />
-              <span className="text-xs font-semibold text-gray-700">CHECK-OUT</span>
+              <span className="text-xs font-semibold text-gray-700">{t('search.checkOut').toUpperCase()}</span>
             </div>
             <p className="text-sm font-medium text-gray-900">
               {selectedCheckOut
@@ -165,7 +167,7 @@ export function PricingCalendar({ propertyId, pricingData, basePrice }: PricingC
                     month: "short",
                     day: "numeric",
                   })
-                : "Select date"}
+                : t('calendar.selectDates')}
             </p>
             {selectedCheckOut && (
               <p className="text-xs text-gray-500">Before 12:00 PM</p>
@@ -177,24 +179,24 @@ export function PricingCalendar({ propertyId, pricingData, basePrice }: PricingC
       {/* Legend */}
       <div className="mb-4">
         <p className="text-xs font-semibold text-gray-700 mb-2">
-          Price & Availability Legend
+          {t('calendar.checkAvailability')}
         </p>
         <div className="grid grid-cols-2 gap-2 text-xs">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-gray-400"></div>
-            <span className="text-gray-600">Sold Out</span>
+            <span className="text-gray-600">{t('calendar.soldOut')}</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-orange-500"></div>
-            <span className="text-gray-600">Peak Season</span>
+            <span className="text-gray-600">{t('calendar.peakSeason')}</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-            <span className="text-gray-600">Best Deal</span>
+            <span className="text-gray-600">{t('calendar.bestDeal')}</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-green-500"></div>
-            <span className="text-gray-600">Available</span>
+            <span className="text-gray-600">{t('calendar.available')}</span>
           </div>
         </div>
       </div>

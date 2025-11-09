@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Heart, Star } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { useTranslation } from "react-i18next";
 
 interface PropertyCardProps {
   id: number;
@@ -35,6 +36,7 @@ export function PropertyCard({
   cardType = "property",
 }: PropertyCardProps) {
   const router = useRouter();
+  const { t } = useTranslation();
   const [isFavorite, setIsFavorite] = useState(initialFavorite);
   const [isHovered, setIsHovered] = useState(false);
   const { selectedCurrency, exchangeRate } = useCurrency();
@@ -77,7 +79,7 @@ export function PropertyCard({
     maximumFractionDigits: 0,
   }).format(convertedPrice);
 
-  const priceLabel = cardType === "car" ? "per day" : `for ${nights} nights`;
+  const priceLabel = cardType === "car" ? t('propertyCard.perDay') : t('propertyCard.forNights', { count: nights });
 
   return (
     <div
@@ -102,7 +104,7 @@ export function PropertyCard({
           {initialFavorite && (
             <div className="absolute top-3 left-3 bg-white px-3 py-1 rounded-full shadow-md">
               <span className="text-xs font-semibold text-gray-700">
-                Guest favorite
+                {t('propertyCard.guestFavorite')}
               </span>
             </div>
           )}
@@ -127,7 +129,7 @@ export function PropertyCard({
           <div className="flex items-start justify-between mb-2">
             <div className="flex-1">
               <h3 className="font-semibold text-gray-900 text-base line-clamp-1 mb-1">
-                {type} in {area}
+                {type} {t('propertyDetail.in')} {area}
               </h3>
               <p className="text-sm text-gray-600 line-clamp-1">{name}</p>
             </div>
@@ -142,7 +144,7 @@ export function PropertyCard({
           {/* Review count */}
           {reviewCount > 0 && (
             <p className="text-xs text-gray-500 mb-2">
-              {reviewCount} {reviewCount === 1 ? "review" : "reviews"}
+              {reviewCount} {reviewCount === 1 ? t('propertyCard.review') : t('propertyCard.reviews')}
             </p>
           )}
 

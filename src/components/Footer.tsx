@@ -1,7 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export function Footer() {
+  const { t } = useTranslation();
+
   return (
     <footer className="bg-[#283B73] text-white py-12 lg:py-16 mt-16">
       <div className="px-4 sm:px-6 lg:px-12 max-w-[1400px] mx-auto">
@@ -15,7 +20,7 @@ export function Footer() {
               <span className="text-3xl font-bold">Staysia</span>
             </Link>
             <p className="text-white/80 text-sm leading-relaxed mb-6">
-              Find your perfect stay across Indonesia. From modern apartments to luxury villas, discover exceptional accommodations for every journey.
+              {t('footer.description')}
             </p>
             <div className="flex gap-4">
               <a
@@ -51,26 +56,26 @@ export function Footer() {
 
           {/* Company Links */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Company</h3>
+            <h3 className="font-semibold text-lg mb-4">{t('footer.company')}</h3>
             <ul className="space-y-3">
               <li>
                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm">
-                  About Us
+                  {t('footer.aboutUs')}
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm">
-                  Careers
+                  {t('footer.careers')}
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm">
-                  Press & Media
+                  {t('footer.pressMedia')}
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm">
-                  Blog
+                  {t('footer.blog')}
                 </Link>
               </li>
             </ul>
@@ -78,26 +83,26 @@ export function Footer() {
 
           {/* Support Links */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Support</h3>
+            <h3 className="font-semibold text-lg mb-4">{t('footer.support')}</h3>
             <ul className="space-y-3">
               <li>
                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm">
-                  Help Center
+                  {t('footer.helpCenter')}
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm">
-                  Safety Information
+                  {t('footer.safetyInformation')}
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm">
-                  Cancellation Options
+                  {t('footer.cancellationOptions')}
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm">
-                  Contact Support
+                  {t('footer.contactSupport')}
                 </Link>
               </li>
             </ul>
@@ -105,26 +110,26 @@ export function Footer() {
 
           {/* Hosting Links */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Hosting</h3>
+            <h3 className="font-semibold text-lg mb-4">{t('footer.hosting')}</h3>
             <ul className="space-y-3">
               <li>
                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm">
-                  Become a Host
+                  {t('footer.becomeAHost')}
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm">
-                  Host Resources
+                  {t('footer.hostResources')}
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm">
-                  Community Forum
+                  {t('footer.communityForum')}
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm">
-                  Responsible Hosting
+                  {t('footer.responsibleHosting')}
                 </Link>
               </li>
             </ul>
@@ -135,17 +140,17 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-white/10">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-white/60 text-sm">
-              © 2025 Staysia. All rights reserved.
+              {t('footer.allRightsReserved')}
             </p>
             <div className="flex gap-6">
               <Link href="#" className="text-white/60 hover:text-white text-sm transition-colors">
-                Privacy Policy
+                {t('footer.privacyPolicy')}
               </Link>
               <Link href="#" className="text-white/60 hover:text-white text-sm transition-colors">
-                Terms of Service
+                {t('footer.termsOfService')}
               </Link>
               <Link href="#" className="text-white/60 hover:text-white text-sm transition-colors">
-                Cookie Policy
+                {t('footer.cookiePolicy')}
               </Link>
             </div>
           </div>
